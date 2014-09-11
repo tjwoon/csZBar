@@ -24,3 +24,4 @@ Return:
 Status:
 
 - Android: DONE
+- iOS: DONE
