@@ -20,3 +20,7 @@ Return:
 - success('scanned bar code') _Successful scan with value of scanned code_
 - error('cancelled') _If user cancelled the scan (with back button etc)_
 - error('misc error message') _Misc failure_
+
+Status:
+
+- Android: DONE
