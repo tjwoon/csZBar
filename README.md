@@ -3,6 +3,14 @@
 This plugin integrates with the [ZBar](http://zbar.sourceforge.net/) library,
 exposing a JavaScript interface for scanning barcodes (QR, 2D, etc).
 
+## Installation
+
+    cordova plugins install org.cloudsky.cordovaplugins.zbar
+
+## License
+
+This plugin is released under the Apache 2.0 license, but the ZBar library on which it depends (and which is distribute with this plugin) is under the LGPL license (2.1).
+
 ## API
 
 ### Scan barcode
