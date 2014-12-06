@@ -19,7 +19,15 @@ This plugin is released under the Apache 2.0 license, but the ZBar library on wh
 
 Arguments:
 
-- **params**: _Unused for now. Will be an object in the future if we extend this plugin with options to specify scannable barcode types, etc._
+- **params**: Optional parameters:
+
+    ```javascript
+    {
+        text_title: "Title Text - default = 'Scan QR Code'",
+        text_instructions: "Instruction Text - default = 'Please point your camera at the QR code.'",
+    }
+    ```
+
 - **onSuccess**: function (s) {...} _Callback for successful scan._
 - **onFailure**: function (s) {...} _Callback for cancelled scan or error._
 

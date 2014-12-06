@@ -1,6 +1,8 @@
 package org.cloudsky.cordovaPlugins;
 
 import java.io.IOException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +17,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import net.sourceforge.zbar.ImageScanner;
 import net.sourceforge.zbar.Image;
@@ -33,6 +35,7 @@ implements SurfaceHolder.Callback {
     // Public Constants ------------------------------------------------
     
     public static final String EXTRA_QRVALUE = "qrValue";
+    public static final String EXTRA_PARAMS = "params";
     public static final int RESULT_ERROR = RESULT_FIRST_USER + 1;
     
     // State -----------------------------------------------------------
@@ -64,6 +67,15 @@ implements SurfaceHolder.Callback {
     {
         super.onCreate(savedInstanceState);
 
+        // Get parameters from JS
+        Intent startIntent = getIntent();
+        String paramStr = startIntent.getStringExtra(EXTRA_PARAMS);
+        JSONObject params;
+        try { params = new JSONObject(paramStr); }
+        catch (JSONException e) { params = new JSONObject(); }
+        String textTitle = params.optString("text_title");
+        String textInstructions = params.optString("text_instructions");
+
         // Initiate instance variables
         autoFocusHandler = new Handler();
         scanner = new ImageScanner();
@@ -72,7 +84,13 @@ implements SurfaceHolder.Callback {
         
         // Set content view
         setContentView(getResourceId("layout/cszbarscanner"));
-        
+
+        // Update view with customisable strings
+        TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
+        TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
+        view_textTitle.setText(textTitle);
+        view_textInstructions.setText(textInstructions);
+
         // Create preview SurfaceView
         scannerSurface = new SurfaceView (this) {
             @Override

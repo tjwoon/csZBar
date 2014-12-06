@@ -1,11 +1,10 @@
 package org.cloudsky.cordovaPlugins;
 
-import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,8 +37,11 @@ public class ZBar extends CordovaPlugin {
             } else {
                 isInProgress = true;
                 scanCallbackContext = callbackContext;
+                JSONObject params = args.optJSONObject(0);
+
                 Context appCtx = cordova.getActivity().getApplicationContext();
                 Intent scanIntent = new Intent(appCtx, ZBarScannerActivity.class);
+                scanIntent.putExtra(ZBarScannerActivity.EXTRA_PARAMS, params.toString());
                 cordova.startActivityForResult(this, scanIntent, SCAN_CODE);
             }
             return true;
