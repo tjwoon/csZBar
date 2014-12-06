@@ -13,7 +13,7 @@ import android.content.Context;
 import org.cloudsky.cordovaPlugins.ZBarScannerActivity;
 
 public class ZBar extends CordovaPlugin {
-    
+
     // Configuration ---------------------------------------------------
 
     private static int SCAN_CODE = 1;
@@ -52,7 +52,7 @@ public class ZBar extends CordovaPlugin {
 
 
     // External results handler ----------------------------------------
-    
+
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent result)
     {

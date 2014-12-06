@@ -31,17 +31,17 @@ public class ZBarScannerActivity extends Activity
 implements SurfaceHolder.Callback {
 
     // Config ----------------------------------------------------------
-    
+
     private static int autoFocusInterval = 500; // Interval between AFcallback and next AF attempt.
-    
+
     // Public Constants ------------------------------------------------
-    
+
     public static final String EXTRA_QRVALUE = "qrValue";
     public static final String EXTRA_PARAMS = "params";
     public static final int RESULT_ERROR = RESULT_FIRST_USER + 1;
-    
+
     // State -----------------------------------------------------------
-    
+
     private Camera camera;
     private Handler autoFocusHandler;
     private SurfaceView scannerSurface;
@@ -59,12 +59,12 @@ implements SurfaceHolder.Callback {
     private Resources resources;
 
     // Static initialisers (class) -------------------------------------
-    
+
     static {
         // Needed by ZBar??
         System.loadLibrary("iconv");
     }
-    
+
     // Activity Lifecycle ----------------------------------------------
 
     @Override
@@ -87,7 +87,7 @@ implements SurfaceHolder.Callback {
         scanner = new ImageScanner();
         scanner.setConfig(0, Config.X_DENSITY, 3);
         scanner.setConfig(0, Config.Y_DENSITY, 3);
-        
+
         // Set content view
         setContentView(getResourceId("layout/cszbarscanner"));
 
@@ -112,18 +112,18 @@ implements SurfaceHolder.Callback {
             Gravity.CENTER
         ));
         scannerSurface.getHolder().addCallback(this);
-        
+
         // Add preview SurfaceView to the screen
         ((FrameLayout) findViewById(getResourceId("id/csZbarScannerView"))).addView(scannerSurface);
         findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
         findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
     }
-    
+
     @Override
     public void onResume ()
     {
         super.onResume();
-        
+
         try {
             if(whichCamera.equals("front")) {
                 int numCams = Camera.getNumberOfCameras();
@@ -149,14 +149,14 @@ implements SurfaceHolder.Callback {
 
         tryStartPreview();
     }
-    
+
     @Override
     public void onPause ()
     {
         releaseCamera();
         super.onPause();
     }
-    
+
     @Override
     public void onDestroy ()
     {
@@ -174,7 +174,7 @@ implements SurfaceHolder.Callback {
     }
 
     // SurfaceHolder.Callback implementation ---------------------------
-    
+
     @Override
     public void surfaceCreated (SurfaceHolder hld)
     {
@@ -182,31 +182,31 @@ implements SurfaceHolder.Callback {
         holder = hld;
         tryStartPreview();
     }
-    
+
     @Override
     public void surfaceDestroyed (SurfaceHolder holder)
     {
         // No surface == no preview == no point being in this Activity.
         die("The camera surface was destroyed");
     }
-    
+
     @Override
     public void surfaceChanged (SurfaceHolder hld, int fmt, int w, int h)
     {
         // Sanity check - holder must have a surface...
         if(hld.getSurface() == null) die("There is no camera surface");
-        
+
         surfW = w;
         surfH = h;
         matchSurfaceToPreviewRatio();
-        
+
         tryStopPreview();
         holder = hld;
         tryStartPreview();
     }
 
     // Continuously auto-focus -----------------------------------------
-    
+
     private AutoFocusCallback autoFocusCb = new AutoFocusCallback()
     {
         public void onAutoFocus(boolean success, Camera camera) {
@@ -220,9 +220,9 @@ implements SurfaceHolder.Callback {
             if(camera != null) camera.autoFocus(autoFocusCb);
         }
     };
-    
+
     // Camera callbacks ------------------------------------------------
-    
+
     // Receives frames from the camera and checks for barcodes.
     private PreviewCallback previewCb = new PreviewCallback()
     {
@@ -235,24 +235,24 @@ implements SurfaceHolder.Callback {
 
             if (scanner.scanImage(barcode) != 0) {
                 String qrValue = "";
-                
+
                 SymbolSet syms = scanner.getResults();
                 for (Symbol sym : syms) {
                     qrValue = sym.getData();
-                    
+
                     // Return 1st found QR code value to the calling Activity.
                     Intent result = new Intent ();
                     result.putExtra(EXTRA_QRVALUE, qrValue);
                     setResult(Activity.RESULT_OK, result);
                     finish();
                 }
-                
+
             }
         }
     };
-   
+
     // Misc ------------------------------------------------------------
-    
+
     // finish() due to error
     private void die (String msg)
     {
@@ -266,7 +266,7 @@ implements SurfaceHolder.Callback {
         if(resources == null) resources = getApplication().getResources();
         return resources.getIdentifier(typeAndName, null, package_name);
     }
-    
+
     // Release the camera resources and state.
     private void releaseCamera ()
     {
@@ -277,19 +277,19 @@ implements SurfaceHolder.Callback {
             camera = null;
         }
     }
-    
+
     // Match the aspect ratio of the preview SurfaceView with the camera's preview aspect ratio,
     // so that the displayed preview is not stretched/squashed.
     private void matchSurfaceToPreviewRatio () {
         if(camera == null) return;
         if(surfW == 0 || surfH == 0) return;
-        
+
         // Resize SurfaceView to match camera preview ratio (avoid stretching).
         Camera.Parameters params = camera.getParameters();
         Camera.Size size = params.getPreviewSize();
         float previewRatio = (float) size.height / size.width; // swap h and w as the preview is rotated 90 degrees
         float surfaceRatio = (float) surfW / surfH;
-        
+
         if(previewRatio > surfaceRatio) {
             scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
                 surfW,
@@ -304,7 +304,7 @@ implements SurfaceHolder.Callback {
             ));
         }
     }
-    
+
     // Stop the camera preview safely.
     private void tryStopPreview () {
         // Stop camera preview before making changes.
@@ -314,7 +314,7 @@ implements SurfaceHolder.Callback {
           // Preview was not running. Ignore the error.
         }
     }
-    
+
     // Start the camera preview if possible.
     // If start is attempted but fails, exit with error message.
     private void tryStartPreview () {
@@ -322,7 +322,7 @@ implements SurfaceHolder.Callback {
             try {
                 // 90 degrees rotation for Portrait orientation Activity.
                 camera.setDisplayOrientation(90);
-                
+
                 camera.setPreviewDisplay(holder);
                 camera.setPreviewCallback(previewCb);
                 camera.startPreview();
