@@ -45,6 +45,15 @@
         self.scanReader.readerDelegate = self;
         self.scanReader.supportedOrientationsMask = ZBarOrientationMaskAll;
 
+        // Get user parameters
+        NSDictionary *params = (NSDictionary*) [command argumentAtIndex:0];
+        NSString * camera = [params objectForKey:@"camera"];
+        if([camera isEqualToString:@"front"]) {
+            // We do not set any specific device for the default "back" setting,
+            // as not all devices will have a rear-facing camera.
+            self.scanReader.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+        }
+
         // Hack to hide the bottom bar's Info button... http://stackoverflow.com/a/16353530
         UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:1] subviews] objectAtIndex:0] subviews] objectAtIndex:3];
         [infoButton setHidden:YES];

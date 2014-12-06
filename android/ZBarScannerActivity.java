@@ -1,6 +1,7 @@
 package org.cloudsky.cordovaPlugins;
 
 import java.io.IOException;
+import java.lang.RuntimeException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
 import android.os.Bundle;
@@ -47,6 +49,9 @@ implements SurfaceHolder.Callback {
     private ImageScanner scanner;
     private int surfW, surfH;
 
+    // Customisable stuff
+    String whichCamera;
+
     // For retrieving R.* resources, from the actual app package
     // (we can't use actual.application.package.R.* in our code as we
     // don't know the applciation package name when writing this plugin).
@@ -75,6 +80,7 @@ implements SurfaceHolder.Callback {
         catch (JSONException e) { params = new JSONObject(); }
         String textTitle = params.optString("text_title");
         String textInstructions = params.optString("text_instructions");
+        whichCamera = params.optString("camera");
 
         // Initiate instance variables
         autoFocusHandler = new Handler();
@@ -119,9 +125,25 @@ implements SurfaceHolder.Callback {
         super.onResume();
         
         try {
-            camera = Camera.open();
-        } catch (Exception e){
+            if(whichCamera.equals("front")) {
+                int numCams = Camera.getNumberOfCameras();
+                CameraInfo cameraInfo = new CameraInfo();
+                for(int i=0; i<numCams; i++) {
+                    Camera.getCameraInfo(i, cameraInfo);
+                    if(cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT) {
+                        camera = Camera.open(i);
+                    }
+                }
+            } else {
+                camera = Camera.open();
+            }
+
+            if(camera == null) throw new Exception ("Error: No suitable camera found.");
+        } catch (RuntimeException e) {
             die("Error: Could not open the camera.");
+            return;
+        } catch (Exception e) {
+            die(e.getMessage());
             return;
         }
 
