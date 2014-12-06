@@ -14,6 +14,7 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -51,6 +52,7 @@ implements SurfaceHolder.Callback {
 
     // Customisable stuff
     String whichCamera;
+    String flashMode;
 
     // For retrieving R.* resources, from the actual app package
     // (we can't use actual.application.package.R.* in our code as we
@@ -81,6 +83,7 @@ implements SurfaceHolder.Callback {
         String textTitle = params.optString("text_title");
         String textInstructions = params.optString("text_instructions");
         whichCamera = params.optString("camera");
+        flashMode = params.optString("flash");
 
         // Initiate instance variables
         autoFocusHandler = new Handler();
@@ -145,6 +148,19 @@ implements SurfaceHolder.Callback {
         } catch (Exception e) {
             die(e.getMessage());
             return;
+        }
+
+        Camera.Parameters camParams = camera.getParameters();
+        if(flashMode.equals("on")) {
+            camParams.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+        } else if(flashMode.equals("off")) {
+            camParams.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        } else {
+            camParams.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+        }
+        try { camera.setParameters(camParams); }
+        catch (RuntimeException e) {
+            Log.d("csZBar", "Unsupported camera parameter reported for flash mode: "+flashMode);
         }
 
         tryStartPreview();

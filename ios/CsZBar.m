@@ -47,11 +47,17 @@
 
         // Get user parameters
         NSDictionary *params = (NSDictionary*) [command argumentAtIndex:0];
-        NSString * camera = [params objectForKey:@"camera"];
+        NSString *camera = [params objectForKey:@"camera"];
         if([camera isEqualToString:@"front"]) {
             // We do not set any specific device for the default "back" setting,
             // as not all devices will have a rear-facing camera.
             self.scanReader.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+        }
+        NSString *flash = [params objectForKey:@"flash"];
+        if([flash isEqualToString:@"on"]) {
+            self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeOn;
+        } else if([flash isEqualToString:@"off"]) {
+            self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
         }
 
         // Hack to hide the bottom bar's Info button... http://stackoverflow.com/a/16353530

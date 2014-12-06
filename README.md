@@ -26,6 +26,7 @@ Arguments:
         text_title: "OPTIONAL Title Text - default = 'Scan QR Code'", // Android only
         text_instructions: "OPTIONAL Instruction Text - default = 'Please point your camera at the QR code.'", // Android only
         camera: "front" || "back" // defaults to "back"
+        flash: "on" || "off" || "auto" // defaults to "auto"
     }
     ```
 
