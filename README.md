@@ -23,8 +23,8 @@ Arguments:
 
     ```javascript
     {
-        text_title: "Title Text - default = 'Scan QR Code'",
-        text_instructions: "Instruction Text - default = 'Please point your camera at the QR code.'",
+        text_title: "OPTIONAL Title Text - default = 'Scan QR Code'", // Android only
+        text_instructions: "OPTIONAL Instruction Text - default = 'Please point your camera at the QR code.'", // Android only
     }
     ```
 
