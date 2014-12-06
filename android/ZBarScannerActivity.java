@@ -342,7 +342,11 @@ implements SurfaceHolder.Callback {
                 camera.setPreviewDisplay(holder);
                 camera.setPreviewCallback(previewCb);
                 camera.startPreview();
-                camera.autoFocus(autoFocusCb);
+                camera.autoFocus(autoFocusCb); // We are not using any of the
+                    // continuous autofocus modes as that does not seem to work
+                    // well with flash setting of "on"... At least with this
+                    // simple and stupid focus method, we get to turn the flash
+                    // on during autofocus.
             } catch (IOException e) {
                 die("Could not start camera preview: " + e.getMessage());
             }

@@ -26,7 +26,7 @@ Arguments:
         text_title: "OPTIONAL Title Text - default = 'Scan QR Code'", // Android only
         text_instructions: "OPTIONAL Instruction Text - default = 'Please point your camera at the QR code.'", // Android only
         camera: "front" || "back" // defaults to "back"
-        flash: "on" || "off" || "auto" // defaults to "auto"
+        flash: "on" || "off" || "auto" // defaults to "auto". See Quirks
     }
     ```
 
@@ -43,3 +43,8 @@ Status:
 
 - Android: DONE
 - iOS: DONE
+
+Quirks:
+
+- __Android__: Flash "on" may cause the flash to alternate between on and off
+  at about a half second/one second interval, instead of making it stay on...
