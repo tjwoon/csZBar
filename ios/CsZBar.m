@@ -63,6 +63,25 @@
         // Hack to hide the bottom bar's Info button... http://stackoverflow.com/a/16353530
         //UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:1] subviews] objectAtIndex:0] subviews] objectAtIndex:3];
         //[infoButton setHidden:YES];
+        
+        BOOL drawSight = [[params objectForKey:@"drawSight"] boolValue];
+        if(drawSight){
+            CGRect screenRect = [[UIScreen mainScreen] bounds];
+            CGFloat screenWidth = screenRect.size.width;
+            CGFloat screenHeight = screenRect.size.height;
+            CGFloat dim = screenWidth < screenHeight ? screenWidth / 1.1 : screenHeight / 1.1;
+            UIView *polygonView = [[UIView alloc] initWithFrame: CGRectMake ( 0, 0, dim, dim)];
+            polygonView.center = self.scanReader.view.center;
+            polygonView.layer.borderColor = [UIColor greenColor].CGColor;
+            polygonView.layer.borderWidth = 3.0f;
+            
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, dim / 2, dim, 1)];
+            lineView.backgroundColor = [UIColor redColor];
+            [polygonView addSubview:lineView];
+            
+            self.scanReader.cameraOverlayView = polygonView;
+            //[self.scanReader.view addSubview:polygonView];
+        }
 
         [self.viewController presentModalViewController: self.scanReader animated: YES];
     }
