@@ -61,8 +61,8 @@
         }
 
         // Hack to hide the bottom bar's Info button... http://stackoverflow.com/a/16353530
-        UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:1] subviews] objectAtIndex:0] subviews] objectAtIndex:3];
-        [infoButton setHidden:YES];
+        //UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:1] subviews] objectAtIndex:0] subviews] objectAtIndex:3];
+        //[infoButton setHidden:YES];
 
         [self.viewController presentModalViewController: self.scanReader animated: YES];
     }
