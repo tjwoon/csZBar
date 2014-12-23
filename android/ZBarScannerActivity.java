@@ -306,19 +306,19 @@ implements SurfaceHolder.Callback {
 
     private AutoFocusCallback autoFocusCb = new AutoFocusCallback()
     {
-        public void onAutoFocus(boolean success, Camera camera) {
-            autoFocusHandler.postDelayed(doAutoFocus, autoFocusInterval);
-        }
+    	public void onAutoFocus(boolean success, Camera camera) {
+    		camera.cancelAutoFocus();
+			autoFocusHandler.postDelayed(doAutoFocus, autoFocusInterval);
+    	}
     };
 
     private Runnable doAutoFocus = new Runnable()
     {
-        public void run() {
-        	if(camera != null){
-    			camera.cancelAutoFocus();
-				camera.autoFocus(autoFocusCb);
-        	}
-        }
+    		public void run() {
+    		if(camera != null){
+    			camera.autoFocus(autoFocusCb);
+    		}
+    	}
     };
 
     // Camera callbacks ------------------------------------------------
