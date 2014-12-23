@@ -314,7 +314,10 @@ implements SurfaceHolder.Callback {
     private Runnable doAutoFocus = new Runnable()
     {
         public void run() {
-            if(camera != null) camera.autoFocus(autoFocusCb);
+        	if(camera != null){
+    			camera.cancelAutoFocus();
+				camera.autoFocus(autoFocusCb);
+        	}
         }
     };
 
