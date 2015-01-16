@@ -94,11 +94,6 @@ implements SurfaceHolder.Callback {
         // Set content view
         setContentView(getResourceId("layout/cszbarscanner"));
 
-        // Update view with customisable strings
-        TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
-        TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
-        view_textTitle.setText(textTitle);
-        view_textInstructions.setText(textInstructions);
 
         // Create preview SurfaceView
         scannerSurface = new SurfaceView (this) {
@@ -118,8 +113,6 @@ implements SurfaceHolder.Callback {
 
         // Add preview SurfaceView to the screen
         ((FrameLayout) findViewById(getResourceId("id/csZbarScannerView"))).addView(scannerSurface);
-        findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
-        findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
     }
 
     @Override
