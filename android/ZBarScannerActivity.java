@@ -8,6 +8,10 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.drawable.ShapeDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PreviewCallback;
@@ -18,7 +22,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,6 +60,15 @@ implements SurfaceHolder.Callback {
     // Customisable stuff
     String whichCamera;
     String flashMode;
+
+    /* START - ALMAVIVA */
+    RelativeLayout relativeLayout;
+    RelativeLayout line;
+    View parent;
+    int width;
+    int height;
+    boolean drawSight = false;
+    /* END - ALMAVIVA */
 
     // For retrieving R.* resources, from the actual app package
     // (we can't use actual.application.package.R.* in our code as we
@@ -91,6 +106,8 @@ implements SurfaceHolder.Callback {
         scanner = new ImageScanner();
         scanner.setConfig(0, Config.X_DENSITY, 3);
         scanner.setConfig(0, Config.Y_DENSITY, 3);
+
+        drawSight = params.optString("drawSight") != null ? Boolean.valueOf(params.optString("drawSight").toLowerCase()) : false;
 
         // Set content view
         setContentView(getResourceId("layout/cszbarscanner"));
