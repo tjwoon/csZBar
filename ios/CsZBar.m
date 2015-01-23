@@ -64,7 +64,7 @@
         //UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:1] subviews] objectAtIndex:0] subviews] objectAtIndex:3];
         //[infoButton setHidden:YES];
         
-        BOOL drawSight = [[params objectForKey:@"drawSight"] boolValue];
+        BOOL drawSight = [params objectForKey:@"drawSight"] ? [[params objectForKey:@"drawSight"] boolValue] : true;
         if(drawSight){
             CGRect screenRect = [[UIScreen mainScreen] bounds];
             CGFloat screenWidth = screenRect.size.width;
