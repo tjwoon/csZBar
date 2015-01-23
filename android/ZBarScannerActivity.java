@@ -113,6 +113,63 @@ implements SurfaceHolder.Callback {
 
         // Add preview SurfaceView to the screen
         ((FrameLayout) findViewById(getResourceId("id/csZbarScannerView"))).addView(scannerSurface);
+		
+		/* START - ALMAVIVA */
+        // Creating a new RelativeLayout
+        if(drawSight){
+	        relativeLayout = new RelativeLayout(this);
+	        line = new RelativeLayout(this);
+	
+	        // Defining the RelativeLayout layout parameters.
+	        // In this case I want to fill its parent
+	        parent = ((FrameLayout) findViewById(getResourceId("id/csZbarScannerView")));
+	        
+	        parent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+	
+	            @Override
+	            public void onGlobalLayout() {
+	                // Ensure you call it only once :
+	            	parent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+	
+	            	width = parent.getWidth();
+	                height = parent.getHeight();
+	                double dim = width < height ? (width / 1.2) : (height / 1.2);
+	                RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams((int)dim,(int)dim);
+	                rlp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+	                rlp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+	                rlp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
+	                relativeLayout.setGravity(Gravity.CENTER);
+	                relativeLayout.setLayoutParams(rlp);
+	                relativeLayout.invalidate();
+	                relativeLayout.requestLayout();
+	                
+	                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(8,((int)dim - 16));
+	                lp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+	                lp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+	                lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
+	                line.setGravity(Gravity.CENTER);
+	                line.setLayoutParams(lp);
+	                line.setBackgroundColor(Color.RED);
+	                line.invalidate();
+	                line.requestLayout();
+	            }
+	        });
+	        
+	        ShapeDrawable rectShapeDrawable = new ShapeDrawable(); // pre defined class
+	        // get paint
+		    Paint paint = rectShapeDrawable.getPaint();
+		
+		    // set border color, stroke and stroke width
+		    paint.setColor(Color.GREEN);
+		    paint.setStyle(Style.STROKE);
+		    paint.setStrokeWidth(8); // you can change the value of 5
+		    //relativeLayout.setBackgroundDrawable(rectShapeDrawable);
+	        
+	        
+		    relativeLayout.addView(line);
+	        ((RelativeLayout) findViewById(getResourceId("id/csZbarScannerViewContainer"))).addView(relativeLayout);
+        }
+        /* END - ALMAVIVA */
     }
 
     @Override
