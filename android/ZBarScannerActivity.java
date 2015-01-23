@@ -20,6 +20,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.sourceforge.zbar.ImageScanner;
