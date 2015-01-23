@@ -107,7 +107,7 @@ implements SurfaceHolder.Callback {
         scanner.setConfig(0, Config.X_DENSITY, 3);
         scanner.setConfig(0, Config.Y_DENSITY, 3);
 
-        drawSight = params.optString("drawSight") != null ? Boolean.valueOf(params.optString("drawSight").toLowerCase()) : false;
+        drawSight = params.optString("drawSight") != null ? Boolean.valueOf(params.optString("drawSight").toLowerCase()) : true;
 
         // Set content view
         setContentView(getResourceId("layout/cszbarscanner"));
