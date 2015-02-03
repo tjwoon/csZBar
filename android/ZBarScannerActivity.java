@@ -294,8 +294,12 @@ implements SurfaceHolder.Callback {
     private AutoFocusCallback autoFocusCb = new AutoFocusCallback()
     {
         public void onAutoFocus(boolean success, Camera camera) {
-			camera.cancelAutoFocus();
-            autoFocusHandler.postDelayed(doAutoFocus, autoFocusInterval);
+		   try{
+				camera.cancelAutoFocus();
+				autoFocusHandler.postDelayed(doAutoFocus, autoFocusInterval);
+		   }catch(Exception e){
+				
+		   }
         }
     };
 
