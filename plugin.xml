@@ -69,7 +69,7 @@
         <source-file src="ios/libzbar.a" framework="true" />
         <source-file src="ios/CsZBar.m" />
         <header-file src="ios/CsZBar.h" />
-		<source-file src="ios/AlmaZBarReaderViewController.m" />
+        <source-file src="ios/AlmaZBarReaderViewController.m" />
         <header-file src="ios/AlmaZBarReaderViewController.h" />
         <header-file src="ios/ZBarSDK/ZBarCameraSimulator.h" />
         <header-file src="ios/ZBarSDK/ZBarCaptureReader.h" />
