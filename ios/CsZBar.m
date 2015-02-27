@@ -60,10 +60,10 @@
             self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
         }
 
-        // Hack to hide the bottom bar's Info button... http://stackoverflow.com/a/16353530
-        //UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:1] subviews] objectAtIndex:0] subviews] objectAtIndex:3];
-        //[infoButton setHidden:YES];
-        
+        // Hack to hide the bottom bar's Info button... originally based on http://stackoverflow.com/a/16353530
+        UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:2] subviews] objectAtIndex:0] subviews] objectAtIndex:3];
+        [infoButton setHidden:YES];
+
         BOOL drawSight = [params objectForKey:@"drawSight"] ? [[params objectForKey:@"drawSight"] boolValue] : true;
         if(drawSight){
             CGRect screenRect = [[UIScreen mainScreen] bounds];
@@ -74,11 +74,11 @@
             //polygonView.center = self.scanReader.view.center;
             //polygonView.layer.borderColor = [UIColor greenColor].CGColor;
             //polygonView.layer.borderWidth = 3.0f;
-            
+
             UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(dim / 2, 0, 1, dim)];
             lineView.backgroundColor = [UIColor redColor];
             [polygonView addSubview:lineView];
-            
+
             self.scanReader.cameraOverlayView = polygonView;
             //[self.scanReader.view addSubview:polygonView];
         }
