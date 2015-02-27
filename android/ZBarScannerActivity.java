@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -82,6 +83,7 @@ implements SurfaceHolder.Callback {
         catch (JSONException e) { params = new JSONObject(); }
         String textTitle = params.optString("text_title");
         String textInstructions = params.optString("text_instructions");
+        Boolean drawSight = params.optBoolean("drawSight", true);
         whichCamera = params.optString("camera");
         flashMode = params.optString("flash");
 
@@ -100,6 +102,11 @@ implements SurfaceHolder.Callback {
         view_textTitle.setText(textTitle);
         view_textInstructions.setText(textInstructions);
 
+        // Draw/hide the sight
+        if(!drawSight) {
+            findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
+        }
+
         // Create preview SurfaceView
         scannerSurface = new SurfaceView (this) {
             @Override
@@ -117,9 +124,14 @@ implements SurfaceHolder.Callback {
         scannerSurface.getHolder().addCallback(this);
 
         // Add preview SurfaceView to the screen
-        ((FrameLayout) findViewById(getResourceId("id/csZbarScannerView"))).addView(scannerSurface);
+        FrameLayout scannerView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
+        scannerView.addView(scannerSurface);
         findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
         findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
+        findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
+        findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
+        scannerView.requestLayout();
+        scannerView.invalidate();
     }
 
     @Override
@@ -226,7 +238,11 @@ implements SurfaceHolder.Callback {
     private AutoFocusCallback autoFocusCb = new AutoFocusCallback()
     {
         public void onAutoFocus(boolean success, Camera camera) {
-            autoFocusHandler.postDelayed(doAutoFocus, autoFocusInterval);
+            // some devices crash without this try/catch and cancelAutoFocus()... (#9)
+            try {
+                camera.cancelAutoFocus();
+                autoFocusHandler.postDelayed(doAutoFocus, autoFocusInterval);
+            } catch (Exception e) {}
         }
     };
 
