@@ -8,10 +8,6 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.drawable.ShapeDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PreviewCallback;
@@ -24,9 +20,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.sourceforge.zbar.ImageScanner;
@@ -61,15 +55,6 @@ implements SurfaceHolder.Callback {
     String whichCamera;
     String flashMode;
 
-    /* START - ALMAVIVA */
-    RelativeLayout relativeLayout;
-    RelativeLayout line;
-    View parent;
-    int width;
-    int height;
-    boolean drawSight = false;
-    /* END - ALMAVIVA */
-
     // For retrieving R.* resources, from the actual app package
     // (we can't use actual.application.package.R.* in our code as we
     // don't know the applciation package name when writing this plugin).
@@ -98,6 +83,7 @@ implements SurfaceHolder.Callback {
         catch (JSONException e) { params = new JSONObject(); }
         String textTitle = params.optString("text_title");
         String textInstructions = params.optString("text_instructions");
+        Boolean drawSight = params.optBoolean("drawSight", true);
         whichCamera = params.optString("camera");
         flashMode = params.optString("flash");
 
@@ -107,11 +93,19 @@ implements SurfaceHolder.Callback {
         scanner.setConfig(0, Config.X_DENSITY, 3);
         scanner.setConfig(0, Config.Y_DENSITY, 3);
 
-        drawSight = params.optString("drawSight") != null ? Boolean.valueOf(params.optString("drawSight").toLowerCase()) : true;
-
         // Set content view
         setContentView(getResourceId("layout/cszbarscanner"));
 
+        // Update view with customisable strings
+        TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
+        TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
+        view_textTitle.setText(textTitle);
+        view_textInstructions.setText(textInstructions);
+
+        // Draw/hide the sight
+        if(!drawSight) {
+            findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
+        }
 
         // Create preview SurfaceView
         scannerSurface = new SurfaceView (this) {
@@ -130,64 +124,14 @@ implements SurfaceHolder.Callback {
         scannerSurface.getHolder().addCallback(this);
 
         // Add preview SurfaceView to the screen
-        ((FrameLayout) findViewById(getResourceId("id/csZbarScannerView"))).addView(scannerSurface);
-		
-		/* START - ALMAVIVA */
-        // Creating a new RelativeLayout
-        if(drawSight){
-	        relativeLayout = new RelativeLayout(this);
-	        line = new RelativeLayout(this);
-	
-	        // Defining the RelativeLayout layout parameters.
-	        // In this case I want to fill its parent
-	        parent = ((FrameLayout) findViewById(getResourceId("id/csZbarScannerView")));
-	        
-	        parent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-	
-	            @Override
-	            public void onGlobalLayout() {
-	                // Ensure you call it only once :
-	            	parent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-	
-	            	width = parent.getWidth();
-	                height = parent.getHeight();
-	                double dim = width < height ? (width / 1.2) : (height / 1.2);
-	                RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams((int)dim,(int)dim);
-	                rlp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-	                rlp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-	                rlp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
-	                relativeLayout.setGravity(Gravity.CENTER);
-	                relativeLayout.setLayoutParams(rlp);
-	                relativeLayout.invalidate();
-	                relativeLayout.requestLayout();
-	                
-	                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(8,((int)dim - 16));
-	                lp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-	                lp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-	                lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
-	                line.setGravity(Gravity.CENTER);
-	                line.setLayoutParams(lp);
-	                line.setBackgroundColor(Color.RED);
-	                line.invalidate();
-	                line.requestLayout();
-	            }
-	        });
-	        
-	        ShapeDrawable rectShapeDrawable = new ShapeDrawable(); // pre defined class
-	        // get paint
-		    Paint paint = rectShapeDrawable.getPaint();
-		
-		    // set border color, stroke and stroke width
-		    paint.setColor(Color.GREEN);
-		    paint.setStyle(Style.STROKE);
-		    paint.setStrokeWidth(8); // you can change the value of 5
-		    //relativeLayout.setBackgroundDrawable(rectShapeDrawable);
-	        
-	        
-		    relativeLayout.addView(line);
-	        ((RelativeLayout) findViewById(getResourceId("id/csZbarScannerViewContainer"))).addView(relativeLayout);
-        }
-        /* END - ALMAVIVA */
+        FrameLayout scannerView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
+        scannerView.addView(scannerSurface);
+        findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
+        findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
+        findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
+        findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
+        scannerView.requestLayout();
+        scannerView.invalidate();
     }
 
     @Override
@@ -294,12 +238,7 @@ implements SurfaceHolder.Callback {
     private AutoFocusCallback autoFocusCb = new AutoFocusCallback()
     {
         public void onAutoFocus(boolean success, Camera camera) {
-		   try{
-				camera.cancelAutoFocus();
-				autoFocusHandler.postDelayed(doAutoFocus, autoFocusInterval);
-		   }catch(Exception e){
-				
-		   }
+            autoFocusHandler.postDelayed(doAutoFocus, autoFocusInterval);
         }
     };
 

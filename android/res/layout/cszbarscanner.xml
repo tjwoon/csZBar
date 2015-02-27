@@ -1,15 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/csZbarScannerViewContainer"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/csZbarScannerView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/csZbarScannerBackground" >
 
-    <FrameLayout
-	    android:id="@+id/csZbarScannerView"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:background="@color/csZbarScannerBackground" >
+    <TextView android:id="@+id/csZbarScannerTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:gravity="center"
+        android:text="@string/csZbarScannerTitle"
+        android:textColor="@color/csZbarScannerTextColor"
+        android:background="@color/csZbarScannerTextBackground"
+        android:fontFamily="sans-serif-light"
+        android:textSize="20pt" />
 
-	</FrameLayout>
+    <TextView android:id="@+id/csZbarScannerInstructions"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:gravity="center"
+        android:textSize="12pt"
+        android:textColor="@color/csZbarScannerTextColor"
+        android:background="@color/csZbarScannerTextBackground"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/csZbarScannerInstructions" />
 
-</RelativeLayout>
+    <RelativeLayout android:id="@+id/csZbarScannerSightContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <View android:id="@+id/csZbarScannerSight"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:background="#ff0000" />
+
+    </RelativeLayout>
+
+</FrameLayout>
