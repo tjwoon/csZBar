@@ -27,7 +27,7 @@ Arguments:
         text_instructions: "OPTIONAL Instruction Text - default = 'Please point your camera at the QR code.'", // Android only
         camera: "front" || "back" // defaults to "back"
         flash: "on" || "off" || "auto" // defaults to "auto". See Quirks
-		drawSight : "true" || "false" //default use true, create a red/green sight to center barcode
+        drawSight: true || false //defaults to true, create a red sight/line in the center of the scanner view.
     }
     ```
 
