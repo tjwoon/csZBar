@@ -37,9 +37,10 @@ import net.sourceforge.zbar.Config;
 
 public class ZBarScannerActivity extends Activity
 implements SurfaceHolder.Callback {
-	
+
+	//for barcode types
 	private Collection<BarcodeFormat> mFormats = null;
-	
+
     // Config ----------------------------------------------------------
 
     private static int autoFocusInterval = 500; // Interval between AFcallback and next AF attempt.
@@ -58,7 +59,7 @@ implements SurfaceHolder.Callback {
     private SurfaceHolder holder;
     private ImageScanner scanner;
     private int surfW, surfH;
-    
+
     // Customisable stuff
     String whichCamera;
     String flashMode;
@@ -109,9 +110,9 @@ implements SurfaceHolder.Callback {
         setContentView(getResourceId("layout/cszbarscanner"));
 
         // Update view with customisable strings
-        //TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
+        TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
         TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
-        //view_textTitle.setText(textTitle);
+        view_textTitle.setText(textTitle);
         view_textInstructions.setText(textInstructions);
 
         // Draw/hide the sight
@@ -138,7 +139,8 @@ implements SurfaceHolder.Callback {
         // Add preview SurfaceView to the screen
         FrameLayout scannerView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
         scannerView.addView(scannerSurface);
-        //findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
+
+        findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
         findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
         findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
         findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
@@ -183,7 +185,7 @@ implements SurfaceHolder.Callback {
             camParams.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
         }
         camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-        
+
         try { camera.setParameters(camParams); }
         catch (RuntimeException e) {
             Log.d("csZBar", "Unsupported camera parameter reported for flash mode: "+flashMode);
@@ -253,7 +255,7 @@ implements SurfaceHolder.Callback {
     {
         public void onAutoFocus(boolean success, Camera camera) {
             // some devices crash without this try/catch and cancelAutoFocus()... (#9)
-        	try {
+            try {
                 camera.cancelAutoFocus();
                 autoFocusHandler.postDelayed(doAutoFocus, autoFocusInterval);
             } catch (Exception e) {}
@@ -360,13 +362,14 @@ implements SurfaceHolder.Callback {
           // Preview was not running. Ignore the error.
         }
     }
-    
+
     public Collection<BarcodeFormat> getFormats() {
         if(mFormats == null) {
             return BarcodeFormat.ALL_FORMATS;
         }
         return mFormats;
     }
+
 
     // Start the camera preview if possible.
     // If start is attempted but fails, exit with error message.
@@ -380,7 +383,7 @@ implements SurfaceHolder.Callback {
                 camera.setPreviewCallback(previewCb);
                 camera.startPreview();
                 //camera.autoFocus(autoFocusCb); // We are not using any of the
-                    // continuous autofocus modes as that does not seem to work
+                // continuous autofocus modes as that does not seem to work
                     // well with flash setting of "on"... At least with this
                     // simple and stupid focus method, we get to turn the flash
                     // on during autofocus.
