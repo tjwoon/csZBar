@@ -38,9 +38,9 @@ import net.sourceforge.zbar.Config;
 public class ZBarScannerActivity extends Activity
 implements SurfaceHolder.Callback {
 
-	//for barcode types
-	private Collection<BarcodeFormat> mFormats = null;
-
+    //for barcode types
+    private Collection<ZBarcodeFormat> mFormats = null;
+    
     // Config ----------------------------------------------------------
 
     private static int autoFocusInterval = 500; // Interval between AFcallback and next AF attempt.
@@ -102,7 +102,8 @@ implements SurfaceHolder.Callback {
         scanner.setConfig(0, Config.X_DENSITY, 3);
         scanner.setConfig(0, Config.Y_DENSITY, 3);
         
-        for(BarcodeFormat format : getFormats()) {
+        // Set the config for barcode formats
+        for(ZBarcodeFormat format : getFormats()) {
             scanner.setConfig(format.getId(), Config.ENABLE, 1);
         }
 
@@ -184,8 +185,10 @@ implements SurfaceHolder.Callback {
         } else {
             camParams.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
         }
-        camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-
+        if (android.os.Build.VERSION.SDK_INT >= 14) {
+        	camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        }
+        
         try { camera.setParameters(camParams); }
         catch (RuntimeException e) {
             Log.d("csZBar", "Unsupported camera parameter reported for flash mode: "+flashMode);
@@ -363,9 +366,9 @@ implements SurfaceHolder.Callback {
         }
     }
 
-    public Collection<BarcodeFormat> getFormats() {
+    public Collection<ZBarcodeFormat> getFormats() {
         if(mFormats == null) {
-            return BarcodeFormat.ALL_FORMATS;
+            return ZBarcodeFormat.ALL_FORMATS;
         }
         return mFormats;
     }
