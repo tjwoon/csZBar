@@ -54,4 +54,4 @@ Quirks:
 
 ## Thanks
 
-Thank you to @PaoloMessina for code contributions.
+Thank you to @PaoloMessina and @nickgerman for code contributions.
