@@ -47,8 +47,9 @@ Status:
 
 Quirks:
 
-- __Android__: Flash "on" may cause the flash to alternate between on and off
-  at about a half second/one second interval, instead of making it stay on...
+- __Android__: On Android API Level < 14, flash "on" may cause the flash to
+  alternate between on and off at about a half second/one second interval,
+  instead of making it stay on...
 
 
 ## Thanks
