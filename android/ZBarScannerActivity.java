@@ -40,7 +40,7 @@ implements SurfaceHolder.Callback {
 
     //for barcode types
     private Collection<ZBarcodeFormat> mFormats = null;
-    
+
     // Config ----------------------------------------------------------
 
     private static int autoFocusInterval = 500; // Interval between AFcallback and next AF attempt.
@@ -101,7 +101,7 @@ implements SurfaceHolder.Callback {
         scanner = new ImageScanner();
         scanner.setConfig(0, Config.X_DENSITY, 3);
         scanner.setConfig(0, Config.Y_DENSITY, 3);
-        
+
         // Set the config for barcode formats
         for(ZBarcodeFormat format : getFormats()) {
             scanner.setConfig(format.getId(), Config.ENABLE, 1);
@@ -188,7 +188,7 @@ implements SurfaceHolder.Callback {
         if (android.os.Build.VERSION.SDK_INT >= 14) {
         	camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         }
-        
+
         try { camera.setParameters(camParams); }
         catch (RuntimeException e) {
             Log.d("csZBar", "Unsupported camera parameter reported for flash mode: "+flashMode);
@@ -253,6 +253,7 @@ implements SurfaceHolder.Callback {
     }
 
     // Continuously auto-focus -----------------------------------------
+    // For API Level < 14
 
     private AutoFocusCallback autoFocusCb = new AutoFocusCallback()
     {
@@ -385,11 +386,14 @@ implements SurfaceHolder.Callback {
                 camera.setPreviewDisplay(holder);
                 camera.setPreviewCallback(previewCb);
                 camera.startPreview();
-                //camera.autoFocus(autoFocusCb); // We are not using any of the
-                // continuous autofocus modes as that does not seem to work
-                    // well with flash setting of "on"... At least with this
-                    // simple and stupid focus method, we get to turn the flash
-                    // on during autofocus.
+
+                if (android.os.Build.VERSION.SDK_INT >= 14) {
+                    camera.autoFocus(autoFocusCb); // We are not using any of the
+                        // continuous autofocus modes as that does not seem to work
+                        // well with flash setting of "on"... At least with this
+                        // simple and stupid focus method, we get to turn the flash
+                        // on during autofocus.
+                }
             } catch (IOException e) {
                 die("Could not start camera preview: " + e.getMessage());
             }
