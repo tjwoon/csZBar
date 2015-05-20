@@ -5,7 +5,7 @@ exposing a JavaScript interface for scanning barcodes (QR, 2D, etc).
 
 ## Installation
 
-    cordova plugins install org.cloudsky.cordovaplugins.zbar
+    cordova plugins add org.cloudsky.cordovaplugins.zbar
 
 ## License
 
