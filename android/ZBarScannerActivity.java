@@ -7,9 +7,11 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
 import android.os.Bundle;
@@ -176,25 +178,6 @@ implements SurfaceHolder.Callback {
             die(e.getMessage());
             return;
         }
-
-        Camera.Parameters camParams = camera.getParameters();
-        if(flashMode.equals("on")) {
-            camParams.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-        } else if(flashMode.equals("off")) {
-            camParams.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-        } else {
-            camParams.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
-        }
-        if (android.os.Build.VERSION.SDK_INT >= 14) {
-        	camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-        }
-
-        try { camera.setParameters(camParams); }
-        catch (RuntimeException e) {
-            Log.d("csZBar", "Unsupported camera parameter reported for flash mode: "+flashMode);
-        }
-
-        tryStartPreview();
     }
 
     @Override
@@ -251,7 +234,78 @@ implements SurfaceHolder.Callback {
         holder = hld;
         tryStartPreview();
     }
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        switch(rotation)
+        {
+        case 0: // '\0'
+            rotation = 90;
+            break;
 
+        case 1: // '\001'
+            rotation = 0;
+            break;
+
+        case 2: // '\002'
+            rotation = 270;
+            break;
+
+        case 3: // '\003'
+            rotation = 180;
+            break;
+
+        default:
+            rotation = 90;
+            break;
+        }
+        camera.setDisplayOrientation(rotation);
+        android.hardware.Camera.Parameters params = camera.getParameters();
+        tryStopPreview();
+        tryStartPreview();
+
+    }
+
+    public void toggleFlash(View view)
+    {
+
+
+    camera.startPreview();
+        android.hardware.Camera.Parameters camParams = camera.getParameters();
+        //If the flash is set to off
+        if(camParams.getFlashMode().equals(Parameters.FLASH_MODE_OFF) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_TORCH))&& !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_ON)))
+            camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
+        else //if(camParams.getFlashMode() == Parameters.FLASH_MODE_ON || camParams.getFlashMode()== Parameters.FLASH_MODE_TORCH)
+            camParams.setFlashMode(Parameters.FLASH_MODE_OFF);
+        try
+        {
+           // camera.setParameters(camParams);
+            camera.setPreviewDisplay(holder);
+            camera.setPreviewCallback(previewCb);
+            camera.startPreview();
+            if (android.os.Build.VERSION.SDK_INT >= 14) {
+                camera.autoFocus(autoFocusCb); // We are not using any of the
+                    // continuous autofocus modes as that does not seem to work
+                    // well with flash setting of "on"... At least with this
+                    // simple and stupid focus method, we get to turn the flash
+                    // on during autofocus.
+                camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            }
+            //tryStopPreview();
+            //tryStartPreview();
+            //camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            camera.setParameters(camParams);
+
+
+        }
+        catch(RuntimeException e)
+        {
+            Log.d("csZBar", (new StringBuilder("Unsupported camera parameter reported for flash mode: ")).append(flashMode).toString());
+        } catch (IOException e) {
+        	Log.d("csZBar", (new StringBuilder("Wrong holder data")).append(flashMode).toString());
+		}
+    }
     // Continuously auto-focus -----------------------------------------
     // For API Level < 14
 
@@ -380,8 +434,37 @@ implements SurfaceHolder.Callback {
     private void tryStartPreview () {
         if(holder != null) {
             try {
+                int rotation = getWindowManager().getDefaultDisplay().getRotation();
+                switch(rotation)
+                {
+                case 0: // '\0'
+                    rotation = 90;
+                    break;
+
+                case 1: // '\001'
+                    rotation = 0;
+                    break;
+
+                case 2: // '\002'
+                    rotation = 270;
+                    break;
+
+                case 3: // '\003'
+                    rotation = 180;
+                    break;
+
+                default:
+                    rotation = 90;
+                    break;
+                }
                 // 90 degrees rotation for Portrait orientation Activity.
-                camera.setDisplayOrientation(90);
+                camera.setDisplayOrientation(rotation);
+                android.hardware.Camera.Parameters camParams = camera.getParameters();
+
+                //camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
+
+                    camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                    camera.setParameters(camParams);
 
                 camera.setPreviewDisplay(holder);
                 camera.setPreviewCallback(previewCb);
