@@ -43,8 +43,7 @@
     UIImage *btnImage = [UIImage imageNamed:@"flash.png"];
     
     [button setImage:btnImage forState:UIControlStateNormal];
-    [button setBackgroundColor: [UIColor blackColor] ];
-    
+
     //[button setBackgroundColor:[UIColor colorWithRed:.859 green:.765 blue:.616 alpha:1.0] forState:UIControlStateHighlighted];
     
     //button.center = CGPointMake( 0,0);
