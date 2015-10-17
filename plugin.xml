@@ -23,11 +23,10 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="application">
-            <activity
-                android:name="org.cloudsky.cordovaPlugins.ZBarScannerActivity"
-                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-                android:screenOrientation="portrait" >
-            </activity>
+        <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+                android:name="org.cloudsky.cordovaPlugins.ZBarScannerActivity" 
+                android:screenOrientation="fullUser" 
+                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-feature android:name="android.hardware.camera" />
