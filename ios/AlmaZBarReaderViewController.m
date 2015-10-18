@@ -40,9 +40,7 @@
     button.clipsToBounds = YES;
     // Set a new (x,y) point for the button's center
     
-    UIImage *btnImage = [UIImage imageNamed:@"flash.png"];
-    
-    [button setImage:btnImage forState:UIControlStateNormal];
+
 
     //[button setBackgroundColor:[UIColor colorWithRed:.859 green:.765 blue:.616 alpha:1.0] forState:UIControlStateHighlighted];
     
@@ -51,6 +49,9 @@
     
     [self.view addSubview:button];
     
+}
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning {
