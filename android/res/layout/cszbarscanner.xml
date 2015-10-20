@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/csZbarScannerView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@color/csZbarScannerBackground" >
 
     <TextView android:id="@+id/csZbarScannerTitle"
@@ -18,29 +18,29 @@
         android:textColor="@color/csZbarScannerTextColor"
         android:background="@color/csZbarScannerTextBackground"
         android:fontFamily="sans-serif-light"
-        android:textSize="20pt" />
+        android:textSize="15pt" />
 
     <TextView android:id="@+id/csZbarScannerInstructions"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_width="match_parent"
+        android:layout_gravity="center|bottom"
+        android:layout_width="296dp"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:paddingBottom="15dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:gravity="center"
-        android:textSize="12pt"
+        android:textSize="8pt"
         android:textColor="@color/csZbarScannerTextColor"
-        android:background="@color/csZbarScannerTextBackground"
         android:fontFamily="sans-serif-light"
         android:text="@string/csZbarScannerInstructions" />
 
     <RelativeLayout android:id="@+id/csZbarScannerSightContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal|bottom">
 
         <View android:id="@+id/csZbarScannerSight"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -48,14 +48,18 @@
             android:gravity="center_vertical"
             android:background="#ff0000" />
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            android:id="@+id/imageButton"
+            android:src="@drawable/camera_flash"
+            android:background="@color/csZbarScannerTextBackground"
+            android:onClick="toggleFlash"
+            android:longClickable="true"
+            android:visibility="visible"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:onClick ="toggleFlash"
-            android:text="Flash" />
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
