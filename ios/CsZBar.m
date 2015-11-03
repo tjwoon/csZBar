@@ -51,6 +51,7 @@
 - (void)scan: (CDVInvokedUrlCommand*)command;
 {
 
+
     if(self.scanInProgress) {
         [self.commandDelegate
          sendPluginResult: [CDVPluginResult
@@ -91,12 +92,23 @@
       //  [infoButton addTarget: action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
 
         //UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem]; [button setTitle:@"Press Me" forState:UIControlStateNormal]; [button sizeToFit]; [self.view addSubview:button];
-
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        CGFloat screenWidth = screenRect.size.width;
+        CGFloat screenHeight = screenRect.size.height;
+        
+        
         BOOL drawSight = [params objectForKey:@"drawSight"] ? [[params objectForKey:@"drawSight"] boolValue] : true;
+        UIToolbar *toolbarViewFlash = [[UIToolbar alloc] init];
+        //The bar length it depends on the orientation
+        toolbarViewFlash.frame = CGRectMake(0.0, 0, (screenWidth > screenHeight ?screenWidth:screenHeight), 44.0);
+        toolbarViewFlash.barStyle = UIBarStyleBlackOpaque;
+        UIBarButtonItem *buttonFlash = [[UIBarButtonItem alloc] initWithTitle:@"Flash" style:UIBarButtonItemStyleDone target:self action:@selector(toggleflash)];
+        NSArray *buttons = [NSArray arrayWithObjects: buttonFlash, nil];
+        [toolbarViewFlash setItems:buttons animated:NO];
+        [self.scanReader.view addSubview:toolbarViewFlash];
+
         if(drawSight){
-            CGRect screenRect = [[UIScreen mainScreen] bounds];
-            CGFloat screenWidth = screenRect.size.width;
-            CGFloat screenHeight = screenRect.size.height;
+
             CGFloat dim = screenWidth < screenHeight ? screenWidth / 1.1 : screenHeight / 1.1;
             UIView *polygonView = [[UIView alloc] initWithFrame: CGRectMake  ( (screenWidth/2) - (dim/2), (screenHeight/2) - (dim/2), dim, dim)];
             //polygonView.center = self.scanReader.view.center;
