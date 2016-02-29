@@ -165,29 +165,32 @@
     ZBarSymbol *symbol = nil;
     for(symbol in results) break; // get the first result
 
-    [self.scanReader dismissModalViewControllerAnimated: YES];
-    self.scanInProgress = NO;
-    [self sendScanResult: [CDVPluginResult
-                           resultWithStatus: CDVCommandStatus_OK
-                           messageAsString: symbol.data]];
+    [self.scanReader dismissViewControllerAnimated: YES completion: ^(void) {
+        self.scanInProgress = NO;
+        [self sendScanResult: [CDVPluginResult
+                               resultWithStatus: CDVCommandStatus_OK
+                               messageAsString: symbol.data]];
+    }];
 }
 
 - (void) imagePickerControllerDidCancel:(UIImagePickerController*)picker
 {
-    [self.scanReader dismissModalViewControllerAnimated: YES];
-    self.scanInProgress = NO;
-    [self sendScanResult: [CDVPluginResult
-                           resultWithStatus: CDVCommandStatus_ERROR
-                           messageAsString: @"cancelled"]];
+    [self.scanReader dismissViewControllerAnimated: YES completion: ^(void) {
+        self.scanInProgress = NO;
+        [self sendScanResult: [CDVPluginResult
+                                resultWithStatus: CDVCommandStatus_ERROR
+                                messageAsString: @"cancelled"]];
+    }];
 }
 
 - (void) readerControllerDidFailToRead:(ZBarReaderController*)reader withRetry:(BOOL)retry
 {
-    [self.scanReader dismissModalViewControllerAnimated: YES];
-    self.scanInProgress = NO;
-    [self sendScanResult: [CDVPluginResult
-                           resultWithStatus: CDVCommandStatus_ERROR
-                           messageAsString: @"Failed"]];
+    [self.scanReader dismissViewControllerAnimated: YES completion: ^(void) {
+        self.scanInProgress = NO;
+        [self sendScanResult: [CDVPluginResult
+                                resultWithStatus: CDVCommandStatus_ERROR
+                                messageAsString: @"Failed"]];
+    }];
 }
 
 
