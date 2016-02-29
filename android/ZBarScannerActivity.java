@@ -5,6 +5,7 @@ import java.lang.RuntimeException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -16,6 +17,8 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
@@ -24,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.content.pm.PackageManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,7 +56,7 @@ implements SurfaceHolder.Callback {
     public static final String EXTRA_QRVALUE = "qrValue";
     public static final String EXTRA_PARAMS = "params";
     public static final int RESULT_ERROR = RESULT_FIRST_USER + 1;
-
+    private static final int CAMERA_PERMISSION_REQUEST = 1;
     // State -----------------------------------------------------------
 
     private Camera camera;
@@ -82,73 +86,111 @@ implements SurfaceHolder.Callback {
     // Activity Lifecycle ----------------------------------------------
 
     @Override
-    public void onCreate (Bundle savedInstanceState)
-    {
+    public void onCreate (Bundle savedInstanceState) {
+
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this.getBaseContext(), Manifest.permission.CAMERA);
+
+        if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+
+            setUpCamera();
+
+        } else {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_REQUEST);
+        }
         super.onCreate(savedInstanceState);
 
-        // Get parameters from JS
-        Intent startIntent = getIntent();
-        String paramStr = startIntent.getStringExtra(EXTRA_PARAMS);
-        JSONObject params;
-        try { params = new JSONObject(paramStr); }
-        catch (JSONException e) { params = new JSONObject(); }
-        String textTitle = params.optString("text_title");
-        String textInstructions = params.optString("text_instructions");
-        Boolean drawSight = params.optBoolean("drawSight", true);
-        whichCamera = params.optString("camera");
-        flashMode = params.optString("flash");
 
-        // Initiate instance variables
-        autoFocusHandler = new Handler();
-        scanner = new ImageScanner();
-        scanner.setConfig(0, Config.X_DENSITY, 3);
-        scanner.setConfig(0, Config.Y_DENSITY, 3);
+    }
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_PERMISSION_REQUEST: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setUpCamera();
+                } else {
 
-        // Set the config for barcode formats
-        for(ZBarcodeFormat format : getFormats()) {
-            scanner.setConfig(format.getId(), Config.ENABLE, 1);
-        }
-
-        // Set content view
-        setContentView(getResourceId("layout/cszbarscanner"));
-
-        // Update view with customisable strings
-        TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
-        TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
-        view_textTitle.setText(textTitle);
-        view_textInstructions.setText(textInstructions);
-
-        // Draw/hide the sight
-        if(!drawSight) {
-            findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
-        }
-
-        // Create preview SurfaceView
-        scannerSurface = new SurfaceView (this) {
-            @Override
-            public void onSizeChanged (int w, int h, int oldW, int oldH) {
-                surfW = w;
-                surfH = h;
-                matchSurfaceToPreviewRatio();
+                   onBackPressed();
+                }
+                return;
             }
-        };
-        scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            Gravity.CENTER
-        ));
-        scannerSurface.getHolder().addCallback(this);
 
-        // Add preview SurfaceView to the screen
-        FrameLayout scannerView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
-        scannerView.addView(scannerSurface);
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+    private void setUpCamera() {
+        // If request is cancelled, the result arrays are empty.
 
-        findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
-        findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
-        findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
-        findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
-        scannerView.requestLayout();
-        scannerView.invalidate();
+
+            // Get parameters from JS
+            Intent startIntent = getIntent();
+            String paramStr = startIntent.getStringExtra(EXTRA_PARAMS);
+            JSONObject params;
+            try { params = new JSONObject(paramStr); }
+            catch (JSONException e) { params = new JSONObject(); }
+            String textTitle = params.optString("text_title");
+            String textInstructions = params.optString("text_instructions");
+            Boolean drawSight = params.optBoolean("drawSight", true);
+            whichCamera = params.optString("camera");
+            flashMode = params.optString("flash");
+
+            // Initiate instance variables
+            autoFocusHandler = new Handler();
+            scanner = new ImageScanner();
+            scanner.setConfig(0, Config.X_DENSITY, 3);
+            scanner.setConfig(0, Config.Y_DENSITY, 3);
+
+            // Set the config for barcode formats
+            for(ZBarcodeFormat format : getFormats()) {
+                scanner.setConfig(format.getId(), Config.ENABLE, 1);
+            }
+
+            // Set content view
+            setContentView(getResourceId("layout/cszbarscanner"));
+
+            // Update view with customisable strings
+            TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
+            TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
+            view_textTitle.setText(textTitle);
+            view_textInstructions.setText(textInstructions);
+
+            // Draw/hide the sight
+            if(!drawSight) {
+                findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
+            }
+
+            // Create preview SurfaceView
+            scannerSurface = new SurfaceView (this) {
+                @Override
+                public void onSizeChanged (int w, int h, int oldW, int oldH) {
+                    surfW = w;
+                    surfH = h;
+                    matchSurfaceToPreviewRatio();
+                }
+            };
+            scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    Gravity.CENTER
+            ));
+            scannerSurface.getHolder().addCallback(this);
+
+            // Add preview SurfaceView to the screen
+            FrameLayout scannerView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
+            scannerView.addView(scannerSurface);
+
+            findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
+            findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
+            findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
+            findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
+            scannerView.requestLayout();
+            scannerView.invalidate();
+
     }
 
     @Override
@@ -172,10 +214,10 @@ implements SurfaceHolder.Callback {
 
             if(camera == null) throw new Exception ("Error: No suitable camera found.");
         } catch (RuntimeException e) {
-            die("Error: Could not open the camera.");
+            //die("Error: Could not open the camera.");
             return;
         } catch (Exception e) {
-            die(e.getMessage());
+           // die(e.getMessage());
             return;
         }
 
@@ -209,7 +251,7 @@ implements SurfaceHolder.Callback {
     @Override
     public void onDestroy ()
     {
-        scanner.destroy();
+        if(scanner != null) scanner.destroy();
         super.onDestroy();
     }
 
