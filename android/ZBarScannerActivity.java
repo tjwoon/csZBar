@@ -51,7 +51,7 @@ implements SurfaceHolder.Callback {
 
     // Config ----------------------------------------------------------
 
-    private static int autoFocusInterval = 500; // Interval between AFcallback and next AF attempt.
+    private static int autoFocusInterval = 2000; // Interval between AFcallback and next AF attempt.
 
     // Public Constants ------------------------------------------------
 
