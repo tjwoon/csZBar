@@ -42,6 +42,7 @@
             <color name="csZbarScannerTextBackground">#88000000</color>
             <color name="csZbarScannerBackground">#000000</color>
         </config-file>
+        <framework src="com.android.support:support-v4:23.1.0" />
         <resource-file src="android/res/layout/cszbarscanner.xml" target="res/layout/cszbarscanner.xml" />
         <source-file src="android/ZBarcodeFormat.java" target-dir="src/org/cloudsky/cordovaPlugins" />
         <source-file src="android/ZBar.java" target-dir="src/org/cloudsky/cordovaPlugins" />
