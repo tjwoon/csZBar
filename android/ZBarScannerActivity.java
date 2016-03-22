@@ -360,12 +360,16 @@ implements SurfaceHolder.Callback {
        
     camera.startPreview();
         android.hardware.Camera.Parameters camParams = camera.getParameters();
-        //If the flash is set to off 
-        if(camParams.getFlashMode().equals(Parameters.FLASH_MODE_OFF) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_TORCH))&& !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_ON)))
-            camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
-        else //if(camParams.getFlashMode() == Parameters.FLASH_MODE_ON || camParams.getFlashMode()== Parameters.FLASH_MODE_TORCH)
-            camParams.setFlashMode(Parameters.FLASH_MODE_OFF);
-        try
+        //If the flash is set to off
+        try {
+            if (camParams.getFlashMode().equals(Parameters.FLASH_MODE_OFF) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_TORCH)) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_ON)))
+                camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
+            else //if(camParams.getFlashMode() == Parameters.FLASH_MODE_ON || camParams.getFlashMode()== Parameters.FLASH_MODE_TORCH)
+                camParams.setFlashMode(Parameters.FLASH_MODE_OFF);
+        }   catch(RuntimeException e) {
+
+        }
+            try
         {
            // camera.setParameters(camParams);
             camera.setPreviewDisplay(holder);
@@ -383,8 +387,8 @@ implements SurfaceHolder.Callback {
             //tryStartPreview();
             //camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             camera.setParameters(camParams);
-        
-    
+
+
         }
         catch(RuntimeException e)
         {
@@ -551,10 +555,13 @@ implements SurfaceHolder.Callback {
                 android.hardware.Camera.Parameters camParams = camera.getParameters();
                 
                 //camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
-                
-                    camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-                    camera.setParameters(camParams);
-                
+
+                try {
+                   camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                   camera.setParameters(camParams);
+                }catch (Exception e){
+
+                }
                 camera.setPreviewDisplay(holder);
                 camera.setPreviewCallback(previewCb);
                 camera.startPreview();
