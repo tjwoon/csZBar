@@ -333,19 +333,20 @@ implements SurfaceHolder.Callback {
 
     }
 
-    public void toggleFlash(View view)
-    {
-
-
-    camera.startPreview();
+    public void toggleFlash(View view) {
+		camera.startPreview();
         android.hardware.Camera.Parameters camParams = camera.getParameters();
         //If the flash is set to off
-        if(camParams.getFlashMode().equals(Parameters.FLASH_MODE_OFF) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_TORCH))&& !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_ON)))
-            camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
-        else //if(camParams.getFlashMode() == Parameters.FLASH_MODE_ON || camParams.getFlashMode()== Parameters.FLASH_MODE_TORCH)
-            camParams.setFlashMode(Parameters.FLASH_MODE_OFF);
-        try
-        {
+        try {
+            if (camParams.getFlashMode().equals(Parameters.FLASH_MODE_OFF) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_TORCH)) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_ON)))
+                camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
+            else //if(camParams.getFlashMode() == Parameters.FLASH_MODE_ON || camParams.getFlashMode()== Parameters.FLASH_MODE_TORCH)
+                camParams.setFlashMode(Parameters.FLASH_MODE_OFF);
+        }   catch(RuntimeException e) {
+
+        }
+
+		try {
            // camera.setParameters(camParams);
             camera.setPreviewDisplay(holder);
             camera.setPreviewCallback(previewCb);
@@ -362,11 +363,7 @@ implements SurfaceHolder.Callback {
             //tryStartPreview();
             //camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             camera.setParameters(camParams);
-
-
-        }
-        catch(RuntimeException e)
-        {
+        } catch(RuntimeException e) {
             Log.d("csZBar", (new StringBuilder("Unsupported camera parameter reported for flash mode: ")).append(flashMode).toString());
         } catch (IOException e) {
         	Log.d("csZBar", (new StringBuilder("Wrong holder data")).append(flashMode).toString());
@@ -531,8 +528,12 @@ implements SurfaceHolder.Callback {
 
                 //camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
 
-                    camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-                    camera.setParameters(camParams);
+                try {
+                   camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                   camera.setParameters(camParams);
+                } catch (Exception e) {
+					// TODO: don't swallow
+                }
 
                 camera.setPreviewDisplay(holder);
                 camera.setPreviewCallback(previewCb);
