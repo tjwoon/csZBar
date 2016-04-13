@@ -179,7 +179,7 @@ implements SurfaceHolder.Callback {
 
         Camera.Parameters camParams = camera.getParameters();
         if(flashMode.equals("on")) {
-            camParams.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+            camParams.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
         } else if(flashMode.equals("off")) {
             camParams.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
         } else {
