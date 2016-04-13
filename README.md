@@ -52,7 +52,7 @@ Quirks:
   instead of making it stay on...
 
 
-## [License](LICENSE)
+## LICENSE [Apache 2.0](LICENSE.md)
 
 This plugin is released under the Apache 2.0 license, but the ZBar library on which it depends (and which is distribute with this plugin) is under the LGPL license (2.1).
 
