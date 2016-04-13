@@ -11,10 +11,6 @@ exposing a JavaScript interface for scanning barcodes (QR, 2D, etc).
 
     cordova plugins add org.cloudsky.cordovaplugins.zbar
 
-## License
-
-This plugin is released under the Apache 2.0 license, but the ZBar library on which it depends (and which is distribute with this plugin) is under the LGPL license (2.1).
-
 ## API
 
 ### Scan barcode
@@ -54,6 +50,11 @@ Quirks:
 - __Android__: On Android API Level < 14, flash "on" may cause the flash to
   alternate between on and off at about a half second/one second interval,
   instead of making it stay on...
+
+
+## [License](LICENSE)
+
+This plugin is released under the Apache 2.0 license, but the ZBar library on which it depends (and which is distribute with this plugin) is under the LGPL license (2.1).
 
 
 ## Thanks
