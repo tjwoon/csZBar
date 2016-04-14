@@ -75,7 +75,7 @@
         <framework src="CoreVideo.framework" />
         <framework src="QuartzCore.framework" />
         <framework src="libiconv.dylib" />
-        <source-file src="ios/libzbar.a" framework="true" />
+        <source-file src="ios/libzbar.a" framework="true" custom="true"/>
         <source-file src="ios/CsZBar.m" />
         <header-file src="ios/CsZBar.h" />
         <source-file src="ios/AlmaZBarReaderViewController.m" />

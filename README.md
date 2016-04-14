@@ -1,3 +1,7 @@
+**This repository is looking for a maintainer! If you believe you are the right person, please [leave a comment](https://github.com/tjwoon/csZBar/issues/60)!**
+
+
+
 # ZBar Barcode Scanner Plugin
 
 This plugin integrates with the [ZBar](http://zbar.sourceforge.net/) library,
@@ -6,11 +10,7 @@ In this fork a button has been added to turn off and on device flash. In additio
 
 ## Installation
 
-    cordova plugins add org.cloudsky.cordovaplugins.zbar
-
-## License
-
-This plugin is released under the Apache 2.0 license, but the ZBar library on which it depends (and which is distribute with this plugin) is under the LGPL license (2.1).
+    cordova plugin add cordova-plugin-cszbar
 
 ## API
 
@@ -51,6 +51,11 @@ Quirks:
 - __Android__: On Android API Level < 14, flash "on" may cause the flash to
   alternate between on and off at about a half second/one second interval,
   instead of making it stay on...
+
+
+## LICENSE [Apache 2.0](LICENSE.md)
+
+This plugin is released under the Apache 2.0 license, but the ZBar library on which it depends (and which is distribute with this plugin) is under the LGPL license (2.1).
 
 
 ## Thanks
