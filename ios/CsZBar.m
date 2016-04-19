@@ -83,7 +83,7 @@
             //[self.scanReader.view addSubview:polygonView];
         }
 
-        [self.viewController presentModalViewController: self.scanReader animated: YES];
+        [self.viewController presentViewController:self.scanReader animated:YES completion:nil];
     }
 }
 
@@ -100,6 +100,7 @@
 
 - (void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary*)info
 {
+    if ([self.scanReader isBeingDismissed]) { return; }
     id<NSFastEnumeration> results = [info objectForKey: ZBarReaderControllerResults];
     ZBarSymbol *symbol = nil;
     for(symbol in results) break; // get the first result
