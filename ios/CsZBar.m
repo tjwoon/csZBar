@@ -11,7 +11,6 @@
 
 @end
 
-
 #pragma mark - Synthesize
 
 @implementation CsZBar
@@ -20,39 +19,25 @@
 @synthesize scanCallbackId;
 @synthesize scanReader;
 
-
 #pragma mark - Cordova Plugin
 
-- (void)pluginInitialize
-{
+- (void)pluginInitialize {
     self.scanInProgress = NO;
 }
+
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     return;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES; //(interfaceOrientation == UIInterfaceOrientationPortrait);
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return YES;
 }
-/*
-- (void)viewDidLoad {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setTitle:@"Turn on Flash" forState:UIControlStateNormal];
-    [button sizeToFit];
-    // Set a new (x,y) point for the button's center
-    button.center = CGPointMake(320/2, 60);
-    [button addTarget:self action:@selector(flashOn) forControlEvents:UIControlEventTouchUpInside];
-    [self.viewController parentViewController:button];
-}*/
 
 #pragma mark - Plugin API
 
-- (void)scan: (CDVInvokedUrlCommand*)command;
+- (void)scan: (CDVInvokedUrlCommand*)command; 
 {
-
-
-    if(self.scanInProgress) {
+    if (self.scanInProgress) {
         [self.commandDelegate
          sendPluginResult: [CDVPluginResult
                             resultWithStatus: CDVCommandStatus_ERROR
@@ -77,81 +62,73 @@
         self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeOn;
 
         NSString *flash = [params objectForKey:@"flash"];
-       if([flash isEqualToString:@"on"]) {
+        
+        if ([flash isEqualToString:@"on"]) {
             self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeOn;
-        } else if([flash isEqualToString:@"off"]) {
+        } else if ([flash isEqualToString:@"off"]) {
             self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
-        }else if([flash isEqualToString:@"auto"]) {
-             self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeAuto;
+        }else if ([flash isEqualToString:@"auto"]) {
+            self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeAuto;
         }
 
         // Hack to hide the bottom bar's Info button... originally based on http://stackoverflow.com/a/16353530
         UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:2] subviews] objectAtIndex:0] subviews] objectAtIndex:3];
         [infoButton setHidden:YES];
-        // Add an action in current code file (i.e. target)
-      //  [infoButton addTarget: action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
 
         //UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem]; [button setTitle:@"Press Me" forState:UIControlStateNormal]; [button sizeToFit]; [self.view addSubview:button];
         CGRect screenRect = [[UIScreen mainScreen] bounds];
         CGFloat screenWidth = screenRect.size.width;
         CGFloat screenHeight = screenRect.size.height;
         
-        
         BOOL drawSight = [params objectForKey:@"drawSight"] ? [[params objectForKey:@"drawSight"] boolValue] : true;
         UIToolbar *toolbarViewFlash = [[UIToolbar alloc] init];
+        
         //The bar length it depends on the orientation
         toolbarViewFlash.frame = CGRectMake(0.0, 0, (screenWidth > screenHeight ?screenWidth:screenHeight), 44.0);
         toolbarViewFlash.barStyle = UIBarStyleBlackOpaque;
         UIBarButtonItem *buttonFlash = [[UIBarButtonItem alloc] initWithTitle:@"Flash" style:UIBarButtonItemStyleDone target:self action:@selector(toggleflash)];
+        
         NSArray *buttons = [NSArray arrayWithObjects: buttonFlash, nil];
         [toolbarViewFlash setItems:buttons animated:NO];
         [self.scanReader.view addSubview:toolbarViewFlash];
 
-        if(drawSight){
-
+        if (drawSight) {
             CGFloat dim = screenWidth < screenHeight ? screenWidth / 1.1 : screenHeight / 1.1;
             UIView *polygonView = [[UIView alloc] initWithFrame: CGRectMake  ( (screenWidth/2) - (dim/2), (screenHeight/2) - (dim/2), dim, dim)];
-            //polygonView.center = self.scanReader.view.center;
-            //polygonView.layer.borderColor = [UIColor greenColor].CGColor;
-            //polygonView.layer.borderWidth = 3.0f;
-
+            
             UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0,dim / 2, dim, 1)];
             lineView.backgroundColor = [UIColor redColor];
             [polygonView addSubview:lineView];
 
             self.scanReader.cameraOverlayView = polygonView;
-            //[self.scanReader.view addSubview:polygonView];
         }
 
         [self.viewController presentViewController:self.scanReader animated:YES completion:nil];
     }
 }
 
-- (void)toggleflash{
+- (void)toggleflash {
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
     [device lockForConfiguration:nil];
     if (device.torchAvailable == 1) {
         if (device.torchMode == 0) {
             [device setTorchMode:AVCaptureTorchModeOn];
             [device setFlashMode:AVCaptureFlashModeOn];
-            
-        }else{
+        } else {
             [device setTorchMode:AVCaptureTorchModeOff];
             [device setFlashMode:AVCaptureFlashModeOff];
         }
-
     }
-        [device unlockForConfiguration];
-
+    
+    [device unlockForConfiguration];
 }
 
 #pragma mark - Helpers
 
-- (void)sendScanResult: (CDVPluginResult*)result
-{
+- (void)sendScanResult: (CDVPluginResult*)result {
     [self.commandDelegate sendPluginResult: result callbackId: self.scanCallbackId];
 }
-
 
 #pragma mark - ZBarReaderDelegate
 
@@ -159,12 +136,15 @@
     return;
 }
 
-- (void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary*)info
-{
-    if ([self.scanReader isBeingDismissed]) { return; }
+- (void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary*)info {
+    if ([self.scanReader isBeingDismissed]) {
+        return;
+    }
+    
     id<NSFastEnumeration> results = [info objectForKey: ZBarReaderControllerResults];
+    
     ZBarSymbol *symbol = nil;
-    for(symbol in results) break; // get the first result
+    for (symbol in results) break; // get the first result
 
     [self.scanReader dismissViewControllerAnimated: YES completion: ^(void) {
         self.scanInProgress = NO;
@@ -174,8 +154,7 @@
     }];
 }
 
-- (void) imagePickerControllerDidCancel:(UIImagePickerController*)picker
-{
+- (void) imagePickerControllerDidCancel:(UIImagePickerController*)picker {
     [self.scanReader dismissViewControllerAnimated: YES completion: ^(void) {
         self.scanInProgress = NO;
         [self sendScanResult: [CDVPluginResult
@@ -184,8 +163,7 @@
     }];
 }
 
-- (void) readerControllerDidFailToRead:(ZBarReaderController*)reader withRetry:(BOOL)retry
-{
+- (void) readerControllerDidFailToRead:(ZBarReaderController*)reader withRetry:(BOOL)retry {
     [self.scanReader dismissViewControllerAnimated: YES completion: ^(void) {
         self.scanInProgress = NO;
         [self sendScanResult: [CDVPluginResult
@@ -193,6 +171,5 @@
                                 messageAsString: @"Failed"]];
     }];
 }
-
 
 @end
