@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        id="org.cloudsky.cordovaplugins.zbar" version="1.3.1">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-cszbar" version="1.3.2">
 
     <engines>
         <engine name="cordova" version=">=3.0.0" />
@@ -23,11 +24,10 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="application">
-            <activity
+        <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
                 android:name="org.cloudsky.cordovaPlugins.ZBarScannerActivity"
-                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-                android:screenOrientation="portrait" >
-            </activity>
+                android:screenOrientation="fullUser"
+                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-feature android:name="android.hardware.camera" />
@@ -43,6 +43,7 @@
             <color name="csZbarScannerTextBackground">#88000000</color>
             <color name="csZbarScannerBackground">#000000</color>
         </config-file>
+        <framework src="com.android.support:support-v4:23.1.0" />
         <resource-file src="android/res/layout/cszbarscanner.xml" target="res/layout/cszbarscanner.xml" />
         <source-file src="android/ZBarcodeFormat.java" target-dir="src/org/cloudsky/cordovaPlugins" />
         <source-file src="android/ZBar.java" target-dir="src/org/cloudsky/cordovaPlugins" />
@@ -52,8 +53,16 @@
         <source-file src="android/libs/armeabi/libzbarjni.so" target-dir="libs/armeabi" />
         <source-file src="android/libs/armeabi-v7a/libiconv.so" target-dir="libs/armeabi-v7a" />
         <source-file src="android/libs/armeabi-v7a/libzbarjni.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="android/libs/arm64-v8a/libiconv.so" target-dir="libs/arm64-v8a" />
+        <source-file src="android/libs/arm64-v8a/libzbarjni.so" target-dir="libs/arm64-v8a" />s
         <source-file src="android/libs/x86/libiconv.so" target-dir="libs/x86" />
         <source-file src="android/libs/x86/libzbarjni.so" target-dir="libs/x86" />
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-hdpi"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-ldpi"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-mdpi"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xhdpi"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
     </platform>
 
     <platform name="ios">
@@ -62,12 +71,18 @@
                 <param name="ios-package" value="CsZBar"/>
             </feature>
         </config-file>
+
+        <!-- Declare Camera Usage for iOS10+ -->
+        <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+            <string>For Barcode Scanning</string>
+        </config-file>
+
         <framework src="AVFoundation.framework" />
         <framework src="CoreMedia.framework" />
         <framework src="CoreVideo.framework" />
         <framework src="QuartzCore.framework" />
         <framework src="libiconv.dylib" />
-        <source-file src="ios/libzbar.a" framework="true" />
+        <source-file src="ios/libzbar.a" framework="true" custom="true"/>
         <source-file src="ios/CsZBar.m" />
         <header-file src="ios/CsZBar.h" />
         <source-file src="ios/AlmaZBarReaderViewController.m" />
