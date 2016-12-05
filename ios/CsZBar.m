@@ -310,4 +310,20 @@
     }];
 }
 
+- (void)toggleflash {
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    [device lockForConfiguration:nil];
+    if (device.torchAvailable == 1) {
+        if (device.torchMode == 0) {
+            [device setTorchMode:AVCaptureTorchModeOn];
+            [device setFlashMode:AVCaptureFlashModeOn];
+        } else {
+            [device setTorchMode:AVCaptureTorchModeOff];
+            [device setFlashMode:AVCaptureFlashModeOff];
+        }
+    }
+    
+    [device unlockForConfiguration];
+}
 @end
