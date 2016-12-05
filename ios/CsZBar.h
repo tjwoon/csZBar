@@ -5,6 +5,7 @@
 @interface CsZBar : CDVPlugin <ZBarReaderDelegate>
 
 - (void)scan: (CDVInvokedUrlCommand*)command;
+- (void)toggleflash;
 
 @property (nonatomic,copy)UIImageView * readLineView;
 @property (nonatomic,assign)BOOL is_Anmotion;
