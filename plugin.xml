@@ -46,12 +46,10 @@
 	    <color name="csZbarScannerMask">#b4808080</color>
         </config-file>
         <framework src="com.android.support:support-v4:23.1.0" />
-	
         <resource-file src="android/res/layout/cszbarscanner.xml" target="res/layout/cszbarscanner.xml" />
         <source-file src="android/ZBarcodeFormat.java" target-dir="src/org/cloudsky/cordovaPlugins" />
         <source-file src="android/ZBar.java" target-dir="src/org/cloudsky/cordovaPlugins" />
         <source-file src="android/ZBarScannerActivity.java" target-dir="src/org/cloudsky/cordovaPlugins" />
-	<source-file src="android/ZBarScanView.java" target-dir="src/org/cloudsky/cordovaPlugins" />
         <source-file src="android/libs/zbar.jar" target-dir="libs" />
         <source-file src="android/libs/armeabi/libiconv.so" target-dir="libs/armeabi" />
         <source-file src="android/libs/armeabi/libzbarjni.so" target-dir="libs/armeabi" />
@@ -61,25 +59,12 @@
         <source-file src="android/libs/arm64-v8a/libzbarjni.so" target-dir="libs/arm64-v8a" />s
         <source-file src="android/libs/x86/libiconv.so" target-dir="libs/x86" />
         <source-file src="android/libs/x86/libzbarjni.so" target-dir="libs/x86" />
-	<source-file src="android/res/drawable/light_select_src.xml" target-dir="res/drawable"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-hdpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-ldpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-mdpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xhdpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
-        <source-file src="android/res/drawable/light_normal.png" target-dir="res/drawable"/>
-        <source-file src="android/res/drawable/light_normal.png" target-dir="res/drawable-hdpi"/>
-        <source-file src="android/res/drawable/light_normal.png" target-dir="res/drawable-ldpi"/>
-        <source-file src="android/res/drawable/light_normal.png" target-dir="res/drawable-mdpi"/>
-        <source-file src="android/res/drawable/light_normal.png" target-dir="res/drawable-xhdpi"/>
-        <source-file src="android/res/drawable/light_normal.png" target-dir="res/drawable-xxhdpi"/>
-        <source-file src="android/res/drawable/light_select.png" target-dir="res/drawable"/>
-        <source-file src="android/res/drawable/light_select.png" target-dir="res/drawable-hdpi"/>
-        <source-file src="android/res/drawable/light_select.png" target-dir="res/drawable-ldpi"/>
-        <source-file src="android/res/drawable/light_select.png" target-dir="res/drawable-mdpi"/>
-        <source-file src="android/res/drawable/light_select.png" target-dir="res/drawable-xhdpi"/>
-        <source-file src="android/res/drawable/light_select.png" target-dir="res/drawable-xxhdpi"/>
     </platform>
 
     <platform name="ios">
