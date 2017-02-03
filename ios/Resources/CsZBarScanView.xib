@@ -18,7 +18,7 @@
                         <constraint firstAttribute="height" constant="34" id="bcw-DT-POo"/>
                         <constraint firstAttribute="width" constant="280" id="w6m-nn-XXq"/>
                     </constraints>
-                    <state key="normal" title="Cancel">
+                    <state key="normal" title="Fechar">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>

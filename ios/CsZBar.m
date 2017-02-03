@@ -101,11 +101,8 @@
 //        CGRect scanCrop=[self getScanCrop:mImagerect readerViewBounds:screenRect];
 //        self.scanReader.scanCrop = scanCrop;
 //        NSString *defaultScantitle = @"请将二维码置于框内";
-        NSString *scantitle = [params objectForKey:@"scantitle"];
-        if (scantitle == nil || scantitle == NULL) {
-            scantitle = @"请将二维码置于框内";
-        }
-        [self setOverlayPickerView : polygonView readerViewBounds:screenRect scantitle:scantitle];
+        NSString *textTitle = [params objectForKey:@"text_title"];
+        [self setOverlayPickerView : polygonView readerViewBounds:screenRect textTitle:textTitle];
         [polygonView addSubview:scanZomeBack];
 
         self.scanReader.cameraOverlayView =polygonView;
@@ -151,7 +148,7 @@
     }];
 }
 
-- (void)setOverlayPickerView:(UIView *)reader readerViewBounds:(CGRect)readerViewBounds scantitle:(NSString *)scantitle
+- (void)setOverlayPickerView:(UIView *)reader readerViewBounds:(CGRect)readerViewBounds textTitle:(NSString *)textTitle
 {
     CGFloat screenWidth = readerViewBounds.size.width;
     CGFloat screenHeight = readerViewBounds.size.height;
@@ -173,7 +170,9 @@
     labIntroudction.frame=CGRectMake(0, 84+(heih-64-50*widthRate)/2, screenWidth, 50*widthRate);
     labIntroudction.textAlignment = NSTextAlignmentCenter;
     labIntroudction.textColor=[UIColor whiteColor];
-    labIntroudction.text=scantitle;
+    labIntroudction.text=textTitle;
+    labIntroudction.numberOfLines = 0;
+    labIntroudction.textAlignment = UITextAlignmentCenter;    
     [upView addSubview:labIntroudction];
     
     //左侧的view
