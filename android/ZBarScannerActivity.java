@@ -2,7 +2,6 @@ package org.cloudsky.cordovaPlugins;
 
 import java.io.IOException;
 import java.lang.RuntimeException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,8 +10,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
@@ -32,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.content.pm.PackageManager;
 import android.view.Surface;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,12 +67,10 @@ implements SurfaceHolder.Callback {
     private SurfaceHolder holder;
     private ImageScanner scanner;
     private int surfW, surfH;
-    
-    private ZBarScanView view_textInstructions ;
 
     // Customisable stuff
     String whichCamera;
-    boolean flash = false;
+    String flashMode;
 
     // For retrieving R.* resources, from the actual app package
     // (we can't use actual.application.package.R.* in our code as we
@@ -143,7 +139,7 @@ implements SurfaceHolder.Callback {
             String textInstructions = params.optString("text_instructions");
             Boolean drawSight = params.optBoolean("drawSight", true);
             whichCamera = params.optString("camera");
-            
+            flashMode = params.optString("flash");
 
             // Initiate instance variables
             autoFocusHandler = new Handler();
@@ -157,49 +153,43 @@ implements SurfaceHolder.Callback {
             }
 
             // Set content view
-            View view = findViewById(getResourceId("layout/cszbarscanner"));
             setContentView(getResourceId("layout/cszbarscanner"));
 
             // Update view with customisable strings
-//            TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
-             view_textInstructions = (ZBarScanView) findViewById(getResourceId("id/zBarScanView"));
-//            view_textTitle.setText(textTitle);
-            view_textInstructions.setSubTitle(textInstructions);
+            TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
+            TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
+            view_textTitle.setText(textTitle);
+            view_textInstructions.setText(textInstructions);
 
             // Draw/hide the sight
-//            if(!drawSight) {
-//                findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
-//            }
+            if(!drawSight) {
+                findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
+            }
 
             // Create preview SurfaceView
-//            scannerSurface = new SurfaceView (this) {
-//                @Override
-//                public void onSizeChanged (int w, int h, int oldW, int oldH) {
-//                    surfW = w;
-//                    surfH = h;
-//                    matchSurfaceToPreviewRatio();
-//                }
-//            };
-//            scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    Gravity.CENTER
-//            ));
-//            scannerSurface.getHolder().addCallback(this);
-            
-            scannerSurface = (SurfaceView) findViewById(getResourceId("id/preview_view"));
-			SurfaceHolder surfaceHolder = scannerSurface.getHolder();
-			surfaceHolder.addCallback(this);
+            scannerSurface = new SurfaceView (this) {
+                @Override
+                public void onSizeChanged (int w, int h, int oldW, int oldH) {
+                    surfW = w;
+                    surfH = h;
+                    matchSurfaceToPreviewRatio();
+                }
+            };
+            scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    Gravity.CENTER
+            ));
+            scannerSurface.getHolder().addCallback(this);
 
             // Add preview SurfaceView to the screen
             FrameLayout scannerView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
-//            scannerView.addView(scannerSurface);
-//           
-////
-//            findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
-//            findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
-//            findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
-//            findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
+            scannerView.addView(scannerSurface);
+
+            findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
+            findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
+            findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
+            findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
             scannerView.requestLayout();
             scannerView.invalidate();
 
@@ -225,7 +215,6 @@ implements SurfaceHolder.Callback {
             }
 
             if(camera == null) throw new Exception ("Error: No suitable camera found.");
-            tryStartPreview();
         } catch (RuntimeException e) {
             //die("Error: Could not open the camera.");
             return;
@@ -345,24 +334,14 @@ implements SurfaceHolder.Callback {
     }
 
     public void toggleFlash(View view) {
-    	flash = !flash;
-    	if(flash){
-    		view.setSelected(true);
-    	}else{
-    		view.setSelected(false);
-    	}
-//		camera.startPreview();
+		camera.startPreview();
         android.hardware.Camera.Parameters camParams = camera.getParameters();
         //If the flash is set to off
         try {
             if (camParams.getFlashMode().equals(Parameters.FLASH_MODE_OFF) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_TORCH)) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_ON)))
-            {   
-            	camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
-            	
-            }else //if(camParams.getFlashMode() == Parameters.FLASH_MODE_ON || camParams.getFlashMode()== Parameters.FLASH_MODE_TORCH)
-            {   
-            	camParams.setFlashMode(Parameters.FLASH_MODE_OFF);
-            }
+                camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
+            else //if(camParams.getFlashMode() == Parameters.FLASH_MODE_ON || camParams.getFlashMode()== Parameters.FLASH_MODE_TORCH)
+                camParams.setFlashMode(Parameters.FLASH_MODE_OFF);
         }   catch(RuntimeException e) {
 
         }
@@ -385,11 +364,10 @@ implements SurfaceHolder.Callback {
             //camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             camera.setParameters(camParams);
         } catch(RuntimeException e) {
-            Log.d("csZBar", e.getMessage());
+            Log.d("csZBar", (new StringBuilder("Unsupported camera parameter reported for flash mode: ")).append(flashMode).toString());
         } catch (IOException e) {
-        	Log.d("csZBar", e.getMessage());
+        	Log.d("csZBar", (new StringBuilder("Wrong holder data")).append(flashMode).toString());
 		}
-		 
     }
     // Continuously auto-focus -----------------------------------------
     // For API Level < 14
@@ -571,10 +549,6 @@ implements SurfaceHolder.Callback {
             } catch (IOException e) {
                 die("Could not start camera preview: " + e.getMessage());
             }
-            if(view_textInstructions!= null){
-            	view_textInstructions.refreshDrawableState();
-            }
         }
-
     }
 }
