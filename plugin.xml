@@ -76,6 +76,9 @@
         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
             <string>For Barcode Scanning</string>
         </config-file>
+        <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+            <string>For Barcode Scanning</string>
+        </config-file>
 
         <framework src="AVFoundation.framework" />
         <framework src="CoreMedia.framework" />
