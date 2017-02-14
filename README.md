@@ -5,7 +5,7 @@
 # ZBar Barcode Scanner Plugin
 
 This plugin integrates with the [ZBar](http://zbar.sourceforge.net/) library,
-exposing a JavaScript interface for scanning barcodes (QR, 2D, etc).
+exposing a JavaScript interface for scanning barcodes (QR Code, EAN-13/UPC-A, UPC-E, EAN-8, Code 128, Code 39, Interleaved 2 of 5, etc).
 In this fork a button has been added to turn off and on device flash. In addition the plugin can now handle the device orientation change.
 
 ## Installation
