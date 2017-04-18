@@ -14,6 +14,7 @@ ZBar.prototype = {
         if(params.text_instructions === undefined) params.text_instructions = "Please point your camera at the QR code.";
         if(params.camera != "front") params.camera = "back";
         if(params.flash != "on" && params.flash != "off") params.flash = "auto";
+        if(!params.formats) params.formats = []; 
 
         exec(success, failure, 'CsZBar', 'scan', [params]);
     },
