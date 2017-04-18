@@ -69,4 +69,15 @@ public class ZBarcodeFormat {
         }
         return ZBarcodeFormat.NONE;
     }
+
+    //new method to get the format by name
+    public static ZBarcodeFormat getFormatByName(String name){
+        for (ZBarcodeFormat format : ALL_FORMATS){
+            if(format.getName() == name) {
+                return format; 
+            }
+        }
+        return ZBarcodeFormat.NONE; 
+    }
+
 }
