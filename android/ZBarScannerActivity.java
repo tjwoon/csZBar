@@ -154,7 +154,7 @@ implements SurfaceHolder.Callback {
 
 
             // Set the config for barcode formats
-            if (formats.length){
+            if (formats.length()){
 
                 //disable all 
                 for(ZBarcodeFormat format : getFormats()) {
