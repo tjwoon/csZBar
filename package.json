@@ -1,0 +1,43 @@
+{
+  "name": "cordova-plugin-cszbar",
+  "version": "1.3.3",
+  "description": "Plugin to integrate with the ZBar barcode scanning library.",
+  "cordova": {
+    "id": "cordova-plugin-cszbar",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjwoon/csZBar.git"
+  },
+  "keywords": [
+    "cszbar",
+    "zbar",
+    "barcode",
+    "qr",
+    "qr code",
+    "scanner",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "engines": [
+    {
+      "name": "cordova-android",
+      "version": ">=3.0.0"
+    },
+    {
+      "name": "cordova-ios",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "TJ Woon <tj@cloudsky.org>",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/tjwoon/csZBar/issues"
+  },
+  "homepage": "https://github.com/tjwoon/csZBar#readme"
+}

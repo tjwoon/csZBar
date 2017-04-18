@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-cszbar" version="1.3.2">
+
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <name>ZBar barcode scanner</name>
+    <author>TJ Woon (tj@cloudsky.org)</author>
+    <description>Plugin to integrate with the ZBar barcode scanning library.</description>
+    <license>Apache 2.0</license>
+    <keywords>cszbar,zbar,barcode,qr,qr code,scanner</keywords>
+
+    <js-module src="www/zbar.js" name="zBar">
+        <clobbers target="cloudSky.zBar" />
+    </js-module>
+
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="CsZBar">
+                <param name="android-package" value="org.cloudsky.cordovaPlugins.ZBar"/>
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="application">
+        <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+                android:name="org.cloudsky.cordovaPlugins.ZBarScannerActivity"
+                android:screenOrientation="fullUser"
+                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-feature android:name="android.hardware.camera" />
+            <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+            <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
+            <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+            <uses-permission android:name="android.permission.CAMERA" />
+        </config-file>
+        <config-file target="res/values/strings.xml" parent="/*">
+            <string name="csZbarScannerTitle">Scan QR Code</string>
+            <string name="csZbarScannerInstructions">Please point your camera at the QR code.</string>
+            <color name="csZbarScannerTextColor">#ffffff</color>
+            <color name="csZbarScannerTextBackground">#88000000</color>
+            <color name="csZbarScannerBackground">#000000</color>
+        </config-file>
+        <framework src="com.android.support:support-v4:23.1.0" />
+        <resource-file src="android/res/layout/cszbarscanner.xml" target="res/layout/cszbarscanner.xml" />
+        <source-file src="android/ZBarcodeFormat.java" target-dir="src/org/cloudsky/cordovaPlugins" />
+        <source-file src="android/ZBar.java" target-dir="src/org/cloudsky/cordovaPlugins" />
+        <source-file src="android/ZBarScannerActivity.java" target-dir="src/org/cloudsky/cordovaPlugins" />
+        <source-file src="android/libs/zbar.jar" target-dir="libs" />
+        <source-file src="android/libs/armeabi/libiconv.so" target-dir="libs/armeabi" />
+        <source-file src="android/libs/armeabi/libzbarjni.so" target-dir="libs/armeabi" />
+        <source-file src="android/libs/armeabi-v7a/libiconv.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="android/libs/armeabi-v7a/libzbarjni.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="android/libs/arm64-v8a/libiconv.so" target-dir="libs/arm64-v8a" />
+        <source-file src="android/libs/arm64-v8a/libzbarjni.so" target-dir="libs/arm64-v8a" />s
+        <source-file src="android/libs/x86/libiconv.so" target-dir="libs/x86" />
+        <source-file src="android/libs/x86/libzbarjni.so" target-dir="libs/x86" />
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-hdpi"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-ldpi"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-mdpi"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xhdpi"/>
+        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="CsZBar">
+                <param name="ios-package" value="CsZBar"/>
+            </feature>
+        </config-file>
+
+        <!-- Declare Camera Usage for iOS10+ -->
+        <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+            <string>For Barcode Scanning</string>
+        </config-file>
+
+        <framework src="AVFoundation.framework" />
+        <framework src="CoreMedia.framework" />
+        <framework src="CoreVideo.framework" />
+        <framework src="QuartzCore.framework" />
+        <framework src="libiconv.dylib" />
+        <source-file src="ios/libzbar.a" framework="true" custom="true"/>
+        <source-file src="ios/CsZBar.m" />
+        <header-file src="ios/CsZBar.h" />
+        <source-file src="ios/AlmaZBarReaderViewController.m" />
+        <header-file src="ios/AlmaZBarReaderViewController.h" />
+        <header-file src="ios/ZBarSDK/ZBarCameraSimulator.h" />
+        <header-file src="ios/ZBarSDK/ZBarCaptureReader.h" />
+        <header-file src="ios/ZBarSDK/ZBarHelpController.h" />
+        <header-file src="ios/ZBarSDK/ZBarImage.h" />
+        <header-file src="ios/ZBarSDK/ZBarImageScanner.h" />
+        <header-file src="ios/ZBarSDK/ZBarReaderController.h" />
+        <header-file src="ios/ZBarSDK/ZBarReaderView.h" />
+        <header-file src="ios/ZBarSDK/ZBarReaderViewController.h" />
+        <header-file src="ios/ZBarSDK/ZBarSDK.h" />
+        <header-file src="ios/ZBarSDK/ZBarSymbol.h" />
+        <header-file src="ios/ZBarSDK/zbar.h" />
+        <header-file src="ios/ZBarSDK/zbar/Decoder.h" />
+        <header-file src="ios/ZBarSDK/zbar/Exception.h" />
+        <header-file src="ios/ZBarSDK/zbar/Image.h" />
+        <header-file src="ios/ZBarSDK/zbar/ImageScanner.h" />
+        <header-file src="ios/ZBarSDK/zbar/Processor.h" />
+        <header-file src="ios/ZBarSDK/zbar/Scanner.h" />
+        <header-file src="ios/ZBarSDK/zbar/Symbol.h" />
+        <header-file src="ios/ZBarSDK/zbar/Video.h" />
+        <header-file src="ios/ZBarSDK/zbar/Window.h" />
+        <resource-file src="ios/Resources/CsZBarScanView.xib" />
+    </platform>
+
+</plugin>
