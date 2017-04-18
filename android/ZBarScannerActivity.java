@@ -162,9 +162,19 @@ implements SurfaceHolder.Callback {
                 }
 
                 //enable only those that are listed 
-                for (String format_name : formats){
-                    ZBarcodeFormat format = ZBarcodeFormat.getFormatByName(format_name);  
-                    scanner.setConfig(format.getId(), Config.ENABLE, 1); 
+                int len = formats.length();
+                for (int i=0;i<len;i++){
+                    String name;
+                    try { 
+                        name = formats.get(i).toString();
+                    }catch(JSONException e){
+                        throw new RuntimeException(e);
+                    }
+
+                    if (name != null){
+                        ZBarcodeFormat format = ZBarcodeFormat.getFormatByName(name); 
+                        scanner.setConfig(format.getId(), Config.ENABLE, 1);   
+                    }
                 }
 
             } else {

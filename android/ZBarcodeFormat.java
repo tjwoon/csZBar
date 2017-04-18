@@ -4,6 +4,7 @@ import net.sourceforge.zbar.Symbol;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects; 
 
 public class ZBarcodeFormat {
     private int mId;
@@ -73,7 +74,7 @@ public class ZBarcodeFormat {
     //new method to get the format by name
     public static ZBarcodeFormat getFormatByName(String name){
         for (ZBarcodeFormat format : ALL_FORMATS){
-            if(format.getName() == name) {
+            if(Objects.equals(format.getName(),name)) {
                 return format; 
             }
         }

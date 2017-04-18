@@ -29,6 +29,7 @@ Arguments:
         camera: "front" || "back" // defaults to "back"
         flash: "on" || "off" || "auto" // defaults to "auto". See Quirks
         drawSight: true || false //defaults to true, create a red sight/line in the center of the scanner view.
+        formats: ["QRCODE","CODE128"] //limit scan to formats listed, leave blank if no restriction is desired. 
     }
     ```
 
