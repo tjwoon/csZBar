@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.RuntimeException;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONArray; 
 
 import android.Manifest;
 import android.app.Activity;
@@ -141,15 +142,36 @@ implements SurfaceHolder.Callback {
             whichCamera = params.optString("camera");
             flashMode = params.optString("flash");
 
+            //new parameter formats - list of formats to scan 
+            JSONArray formats = params.optJSONArray("formats"); 
+
+
             // Initiate instance variables
             autoFocusHandler = new Handler();
             scanner = new ImageScanner();
             scanner.setConfig(0, Config.X_DENSITY, 3);
             scanner.setConfig(0, Config.Y_DENSITY, 3);
 
+
             // Set the config for barcode formats
-            for(ZBarcodeFormat format : getFormats()) {
-                scanner.setConfig(format.getId(), Config.ENABLE, 1);
+            if (formats.length){
+
+                //disable all 
+                for(ZBarcodeFormat format : getFormats()) {
+                    scanner.setConfig(format.getId(), Config.ENABLE, 0);
+                }
+
+                //enable only those that are listed 
+                for (String format_name : formats){
+                    ZBarcodeFormat format = ZBarcodeFormat.getFormatByName(format_name);  
+                    scanner.setConfig(format.getId(), Config.ENABLE, 1); 
+                }
+
+            } else {
+                // no format specified, read all 
+                for(ZBarcodeFormat format : getFormats()) {
+                    scanner.setConfig(format.getId(), Config.ENABLE, 1);
+                }
             }
 
             // Set content view
@@ -334,7 +356,7 @@ implements SurfaceHolder.Callback {
     }
 
     public void toggleFlash(View view) {
-		camera.startPreview();
+        camera.startPreview();
         android.hardware.Camera.Parameters camParams = camera.getParameters();
         //If the flash is set to off
         try {
@@ -346,7 +368,7 @@ implements SurfaceHolder.Callback {
 
         }
 
-		try {
+        try {
            // camera.setParameters(camParams);
             camera.setPreviewDisplay(holder);
             camera.setPreviewCallback(previewCb);
@@ -366,8 +388,8 @@ implements SurfaceHolder.Callback {
         } catch(RuntimeException e) {
             Log.d("csZBar", (new StringBuilder("Unsupported camera parameter reported for flash mode: ")).append(flashMode).toString());
         } catch (IOException e) {
-        	Log.d("csZBar", (new StringBuilder("Wrong holder data")).append(flashMode).toString());
-		}
+            Log.d("csZBar", (new StringBuilder("Wrong holder data")).append(flashMode).toString());
+        }
     }
     // Continuously auto-focus -----------------------------------------
     // For API Level < 14
@@ -532,7 +554,7 @@ implements SurfaceHolder.Callback {
                    camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
                    camera.setParameters(camParams);
                 } catch (Exception e) {
-					// TODO: don't swallow
+                    // TODO: don't swallow
                 }
 
                 camera.setPreviewDisplay(holder);
