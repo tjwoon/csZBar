@@ -136,7 +136,7 @@ implements SurfaceHolder.Callback {
             try { params = new JSONObject(paramStr); }
             catch (JSONException e) { params = new JSONObject(); }
             String textTitle = params.optString("text_title");
-            String backgroundTitle = params.optString("background_color_title");
+            String themeColor = params.optString("theme_color");
             String textInstructions = params.optString("text_instructions");
             Boolean drawSight = params.optBoolean("drawSight", true);
             whichCamera = params.optString("camera");
@@ -160,8 +160,9 @@ implements SurfaceHolder.Callback {
             TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
             TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
             view_textTitle.setText(textTitle);
-            view_textTitle.setBackgroundColor(Color.parseColor(backgroundTitle));
             view_textInstructions.setText(textInstructions);
+            view_textTitle.setBackgroundColor(Color.parseColor(themeColor));
+            view_textInstructions.setBackgroundColor(Color.parseColor(themeColor));
 
             // Draw/hide the sight
             if(!drawSight) {
@@ -192,7 +193,6 @@ implements SurfaceHolder.Callback {
             findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
             findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
             findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerlogo")).bringToFront();
             scannerView.requestLayout();
             scannerView.invalidate();
 
@@ -555,4 +555,3 @@ implements SurfaceHolder.Callback {
         }
     }
 }
-
