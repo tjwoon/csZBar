@@ -29,7 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.content.pm.PackageManager;
 import android.view.Surface;
-
+import android.graphics.Color;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -136,6 +136,7 @@ implements SurfaceHolder.Callback {
             try { params = new JSONObject(paramStr); }
             catch (JSONException e) { params = new JSONObject(); }
             String textTitle = params.optString("text_title");
+            String themeColor = params.optString("theme_color");
             String textInstructions = params.optString("text_instructions");
             Boolean drawSight = params.optBoolean("drawSight", true);
             whichCamera = params.optString("camera");
@@ -160,6 +161,8 @@ implements SurfaceHolder.Callback {
             TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
             view_textTitle.setText(textTitle);
             view_textInstructions.setText(textInstructions);
+            view_textTitle.setBackgroundColor(Color.parseColor(themeColor));
+            view_textInstructions.setBackgroundColor(Color.parseColor(themeColor));
 
             // Draw/hide the sight
             if(!drawSight) {
@@ -172,7 +175,7 @@ implements SurfaceHolder.Callback {
                 public void onSizeChanged (int w, int h, int oldW, int oldH) {
                     surfW = w;
                     surfH = h;
-                    matchSurfaceToPreviewRatio();
+                    //matchSurfaceToPreviewRatio();
                 }
             };
             scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
@@ -294,7 +297,7 @@ implements SurfaceHolder.Callback {
 
         surfW = w;
         surfH = h;
-        matchSurfaceToPreviewRatio();
+        //matchSurfaceToPreviewRatio();
 
         tryStopPreview();
         holder = hld;

@@ -22,7 +22,7 @@
 
     <TextView android:id="@+id/csZbarScannerInstructions"
         android:layout_gravity="center|bottom"
-        android:layout_width="296dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:paddingBottom="15dp"
@@ -50,7 +50,7 @@
 
         <ImageButton
             android:layout_width="60dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:id="@+id/imageButton"
             android:src="@drawable/camera_flash"
             android:background="@color/csZbarScannerTextBackground"
@@ -59,7 +59,8 @@
             android:visibility="visible"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="45dp" />
 
     </RelativeLayout>
 
