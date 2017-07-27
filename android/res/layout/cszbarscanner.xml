@@ -38,12 +38,14 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal|bottom">
-	
-	<ImageView
-                android:id="@+id/logoApp"
-		android:layout_marginLeft="10dp"
-            	android:layout_marginRight="10dp"
-                android:src="@drawable/nucash-logo" />
+
+        <ImageView android:id="@+id/csZbarScannerlogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:src="@drawable/nucash_logo" />
 
         <View android:id="@+id/csZbarScannerSight"
             android:layout_width="match_parent"
@@ -53,7 +55,7 @@
             android:layout_centerInParent="true"
             android:gravity="center_vertical"
             android:background="#ff0000" />
-	
+
         <ImageButton
             android:layout_width="60dp"
             android:layout_height="70dp"
@@ -70,3 +72,4 @@
     </RelativeLayout>
 
 </FrameLayout>
+

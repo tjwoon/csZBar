@@ -63,6 +63,12 @@
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-mdpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xhdpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
+        <source-file src="android/res/drawable/nucash-logo.png" target-dir="res/drawable"/>
+        <source-file src="android/res/drawable/nucash-logo.png" target-dir="res/drawable-hdpi"/>
+        <source-file src="android/res/drawable/nucash-logo.png" target-dir="res/drawable-ldpi"/>
+        <source-file src="android/res/drawable/nucash-logo.png" target-dir="res/drawable-mdpi"/>
+        <source-file src="android/res/drawable/nucash-logo.png" target-dir="res/drawable-xhdpi"/>
+        <source-file src="android/res/drawable/nucash-logo.png" target-dir="res/drawable-xxhdpi"/>
     </platform>
 
     <platform name="ios">
