@@ -24,6 +24,7 @@ Arguments:
 
     ```javascript
     {
+        theme_color:"OPTIONAL theme - default = '#88000000'" // Android only
         text_title: "OPTIONAL Title Text - default = 'Scan QR Code'", // Android only
         text_instructions: "OPTIONAL Instruction Text - default = 'Please point your camera at the QR code.'", // Android only
         camera: "front" || "back" // defaults to "back"

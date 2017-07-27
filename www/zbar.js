@@ -10,6 +10,7 @@ ZBar.prototype = {
         argscheck.checkArgs('*fF', 'CsZBar.scan', arguments);
 
         params = params || {};
+        if(params.theme_color === undefined) params.theme_color = "#88000000";
         if(params.text_title === undefined) params.text_title = "Scan QR Code";
         if(params.text_instructions === undefined) params.text_instructions = "Please point your camera at the QR code.";
         if(params.camera != "front") params.camera = "back";
