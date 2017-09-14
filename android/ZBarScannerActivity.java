@@ -29,7 +29,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.content.pm.PackageManager;
 import android.view.Surface;
-
+import android.widget.Button;
+import	android.widget.ImageView ;
+import android.widget.LinearLayout ;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +44,12 @@ import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 import net.sourceforge.zbar.Config;
+
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Bitmap;
+
 
 public class ZBarScannerActivity extends Activity
 implements SurfaceHolder.Callback {
@@ -105,7 +113,6 @@ implements SurfaceHolder.Callback {
         }
         super.onCreate(savedInstanceState);
 
-
     }
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -127,7 +134,6 @@ implements SurfaceHolder.Callback {
     }
     private void setUpCamera() {
         // If request is cancelled, the result arrays are empty.
-
 
             // Get parameters from JS
             Intent startIntent = getIntent();
@@ -154,17 +160,24 @@ implements SurfaceHolder.Callback {
 
             // Set content view
             setContentView(getResourceId("layout/cszbarscanner"));
+            Button button = (Button) findViewById(getResourceId("id/back"));
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                }
+            });
 
             // Update view with customisable strings
-            TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
-            TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
-            view_textTitle.setText(textTitle);
-            view_textInstructions.setText(textInstructions);
+            //TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
+            //TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
+            //view_textTitle.setText(textTitle);
+            //view_textInstructions.setText(textInstructions);
 
             // Draw/hide the sight
             if(!drawSight) {
                 findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
             }
+
 
             // Create preview SurfaceView
             scannerSurface = new SurfaceView (this) {
@@ -186,9 +199,17 @@ implements SurfaceHolder.Callback {
             FrameLayout scannerView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
             scannerView.addView(scannerSurface);
 
-            findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
+            CustomView tcanvas=new CustomView(this);
+            scannerView.addView(tcanvas);
+
+            Bitmap bitmap= Bitmap.createBitmap(440,587,Bitmap.Config.ARGB_8888);
+            Canvas can=new Canvas(bitmap);
+            tcanvas.draw(can);
+
+            findViewById(getResourceId("id/back")).bringToFront();
+        //    findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
+        //    findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
+        //    findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
             findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
             scannerView.requestLayout();
             scannerView.invalidate();
@@ -461,17 +482,19 @@ implements SurfaceHolder.Callback {
 
         if(previewRatio > surfaceRatio) {
             scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
-                surfW,
-                Math.round((float) surfW / previewRatio),
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 Gravity.CENTER
             ));
         } else if(previewRatio < surfaceRatio) {
             scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
-                Math.round((float) surfH * previewRatio),
-                surfH,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 Gravity.CENTER
             ));
         }
+
+        
     }
 
     // Stop the camera preview safely.
@@ -551,4 +574,9 @@ implements SurfaceHolder.Callback {
             }
         }
     }
+
 }
+
+
+
+
