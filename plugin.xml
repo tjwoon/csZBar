@@ -67,50 +67,5 @@
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xhdpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
     </platform>
-
-    <platform name="ios">
-        <config-file target="config.xml" parent="/*">
-            <feature name="CsZBar">
-                <param name="ios-package" value="CsZBar"/>
-            </feature>
-        </config-file>
-
-        <!-- Declare Camera Usage for iOS10+ -->
-        <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
-            <string>For Barcode Scanning</string>
-        </config-file>
-
-        <framework src="AVFoundation.framework" />
-        <framework src="CoreMedia.framework" />
-        <framework src="CoreVideo.framework" />
-        <framework src="QuartzCore.framework" />
-        <framework src="libiconv.dylib" />
-        <source-file src="ios/libzbar.a" framework="true" custom="true"/>
-        <source-file src="ios/CsZBar.m" />
-        <header-file src="ios/CsZBar.h" />
-        <source-file src="ios/AlmaZBarReaderViewController.m" />
-        <header-file src="ios/AlmaZBarReaderViewController.h" />
-        <header-file src="ios/ZBarSDK/ZBarCameraSimulator.h" />
-        <header-file src="ios/ZBarSDK/ZBarCaptureReader.h" />
-        <header-file src="ios/ZBarSDK/ZBarHelpController.h" />
-        <header-file src="ios/ZBarSDK/ZBarImage.h" />
-        <header-file src="ios/ZBarSDK/ZBarImageScanner.h" />
-        <header-file src="ios/ZBarSDK/ZBarReaderController.h" />
-        <header-file src="ios/ZBarSDK/ZBarReaderView.h" />
-        <header-file src="ios/ZBarSDK/ZBarReaderViewController.h" />
-        <header-file src="ios/ZBarSDK/ZBarSDK.h" />
-        <header-file src="ios/ZBarSDK/ZBarSymbol.h" />
-        <header-file src="ios/ZBarSDK/zbar.h" />
-        <header-file src="ios/ZBarSDK/zbar/Decoder.h" />
-        <header-file src="ios/ZBarSDK/zbar/Exception.h" />
-        <header-file src="ios/ZBarSDK/zbar/Image.h" />
-        <header-file src="ios/ZBarSDK/zbar/ImageScanner.h" />
-        <header-file src="ios/ZBarSDK/zbar/Processor.h" />
-        <header-file src="ios/ZBarSDK/zbar/Scanner.h" />
-        <header-file src="ios/ZBarSDK/zbar/Symbol.h" />
-        <header-file src="ios/ZBarSDK/zbar/Video.h" />
-        <header-file src="ios/ZBarSDK/zbar/Window.h" />
-        <resource-file src="ios/Resources/CsZBarScanView.xib" />
-    </platform>
-
+    
 </plugin>
