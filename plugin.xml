@@ -61,6 +61,7 @@
         <source-file src="android/libs/x86/libzbarjni.so" target-dir="libs/x86" />
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable"/>
         <source-file src="android/res/drawable/white.png" target-dir="res/drawable"/>
+        <source-file src="android/res/drawable/scan_qrcode.png" target-dir="res/drawable"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-hdpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-ldpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-mdpi"/>

@@ -168,7 +168,7 @@ implements SurfaceHolder.Callback {
             });
 
             // Update view with customisable strings
-            //TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
+//            TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
             //TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
             //view_textTitle.setText(textTitle);
             //view_textInstructions.setText(textInstructions);
@@ -200,14 +200,14 @@ implements SurfaceHolder.Callback {
             scannerView.addView(scannerSurface);
 
             CustomView tcanvas=new CustomView(this);
-            scannerView.addView(tcanvas);
+           scannerView.addView(tcanvas);
 
             Bitmap bitmap= Bitmap.createBitmap(440,587,Bitmap.Config.ARGB_8888);
-            Canvas can=new Canvas(bitmap);
-            tcanvas.draw(can);
+            //Canvas can=new Canvas(bitmap);
+            //tcanvas.draw(can);
 
             findViewById(getResourceId("id/back")).bringToFront();
-        //    findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
+          //  findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
         //    findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
         //    findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
             findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
