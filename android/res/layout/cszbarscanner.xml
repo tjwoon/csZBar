@@ -5,26 +5,6 @@
     android:layout_height="fill_parent"
     android:background="@color/csZbarScannerTextBackground">
 
-<!--<android:background="@color/csZbarScannerTextBackground">-->
-
-
-     <!--<TextView android:id="@+id/csZbarScannerTitle"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="top|center_horizontal"-->
-                <!--android:paddingTop="10dp"-->
-                <!--android:paddingBottom="10dp"-->
-                <!--android:paddingLeft="-50dp"-->
-                <!--android:paddingRight="5dp"-->
-                <!--android:layout_marginLeft="32dp"-->
-                <!--android:gravity="center"-->
-                <!--android:text="@string/csZbarScannerTitle"-->
-                <!--android:textColor="@color/csZbarScannerTextColor"-->
-                <!--android:background="#d53b2c"-->
-                <!--android:fontFamily="sans-serif-light"-->
-                <!--android:textSize="9.999pt"-->
-                <!--android:scaleType="fitCenter"/>-->
-
     <Button android:id="@+id/back"
            android:layout_width="20dip"
            android:layout_height="20dip"
@@ -33,21 +13,6 @@
            android:gravity="top|left"
            android:background="@drawable/white"
            android:onClick="back" />
-    <!--<TextView android:id="@+id/csZbarScannerInstructions"-->
-                <!--android:layout_gravity="center|bottom"-->
-                <!--android:layout_width="296dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:paddingTop="5dp"-->
-                <!--android:paddingBottom="15dp"-->
-                <!--android:paddingLeft="5dp"-->
-                <!--android:paddingRight="5dp"-->
-                <!--android:gravity="center"-->
-                <!--android:textSize="8pt"-->
-                <!--android:textColor="@color/csZbarScannerTextColor"-->
-                <!--android:fontFamily="sans-serif-light"-->
-                <!--android:text="@string/csZbarScannerInstructions" />-->
-
-
 
     <org.cloudsky.cordovaPlugins.CustomView
             android:id="@+id/CustomView"
