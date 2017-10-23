@@ -49,7 +49,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Bitmap;
-
+import ion.com.dmo2.R;
 
 public class ZBarScannerActivity extends Activity
 implements SurfaceHolder.Callback {
@@ -98,21 +98,16 @@ implements SurfaceHolder.Callback {
     @Override
     public void onCreate (Bundle savedInstanceState) {
 
-
         int permissionCheck = ContextCompat.checkSelfPermission(this.getBaseContext(), Manifest.permission.CAMERA);
-
         if(permissionCheck == PackageManager.PERMISSION_GRANTED){
-
             setUpCamera();
-
         } else {
-
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     CAMERA_PERMISSION_REQUEST);
         }
         super.onCreate(savedInstanceState);
-
+        overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
     }
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -122,7 +117,6 @@ implements SurfaceHolder.Callback {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setUpCamera();
                 } else {
-
                    onBackPressed();
                 }
                 return;
@@ -164,11 +158,12 @@ implements SurfaceHolder.Callback {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     finish();
+                    overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
                 }
             });
 
             // Update view with customisable strings
-//            TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
+            //TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
             //TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
             //view_textTitle.setText(textTitle);
             //view_textInstructions.setText(textInstructions);
@@ -200,16 +195,14 @@ implements SurfaceHolder.Callback {
             scannerView.addView(scannerSurface);
 
             CustomView tcanvas=new CustomView(this);
-           scannerView.addView(tcanvas);
+            scannerView.addView(tcanvas);
 
             Bitmap bitmap= Bitmap.createBitmap(440,587,Bitmap.Config.ARGB_8888);
-            //Canvas can=new Canvas(bitmap);
-            //tcanvas.draw(can);
 
             findViewById(getResourceId("id/back")).bringToFront();
-          //  findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
-        //    findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
-        //    findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
+            //findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
+            //findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
+            //findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
             findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
             scannerView.requestLayout();
             scannerView.invalidate();
@@ -288,6 +281,7 @@ implements SurfaceHolder.Callback {
     {
         setResult(RESULT_CANCELED);
         super.onBackPressed();
+        overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
     }
 
     // SurfaceHolder.Callback implementation ---------------------------
@@ -435,6 +429,7 @@ implements SurfaceHolder.Callback {
                     result.putExtra(EXTRA_QRVALUE, qrValue);
                     setResult(Activity.RESULT_OK, result);
                     finish();
+                    overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
                 }
 
             }
@@ -448,6 +443,7 @@ implements SurfaceHolder.Callback {
     {
         setResult(RESULT_ERROR);
         finish();
+        overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
     }
 
     private int getResourceId (String typeAndName)
