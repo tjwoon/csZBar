@@ -50,6 +50,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Bitmap;
 import ion.com.dmo2.R;
+import android.graphics.Rect;
+import android.view.TouchDelegate;
 
 public class ZBarScannerActivity extends Activity
 implements SurfaceHolder.Callback {
@@ -108,6 +110,28 @@ implements SurfaceHolder.Callback {
         }
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
+
+        //To increase the clickable area of the button
+        FrameLayout parentView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
+         parentView.post(new Runnable() {
+            @Override
+            public void run() {
+                Rect delegateArea = new Rect();
+                Button myButton = (Button) findViewById(getResourceId("id/back"));
+                myButton.setEnabled(true);
+                myButton.getHitRect(delegateArea);
+                delegateArea.top -= 25;
+                delegateArea.left -= 25;
+                delegateArea.right += 50;
+                delegateArea.bottom += 50;
+
+                TouchDelegate touchDelegate = new TouchDelegate(delegateArea,myButton);
+
+                if (View.class.isInstance(myButton.getParent())) {
+                    ((View) myButton.getParent()).setTouchDelegate(touchDelegate);
+                }
+            }
+        });
     }
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
