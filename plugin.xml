@@ -44,7 +44,8 @@
             <color name="csZbarScannerBackground">#000000</color>
         </config-file>
         <framework src="com.android.support:support-v4:23.1.0" />
-
+        <resource-file src="android/res/anim/push_out_to_bottom.xml" target="res/anim/push_out_to_bottom.xml" />
+        <resource-file src="android/res/anim/pull_up_from_bottom.xml" target="res/anim/pull_up_from_bottom.xml" />
         <resource-file src="android/res/layout/cszbarscanner.xml" target="res/layout/cszbarscanner.xml" />
         <source-file src="android/CustomView.java" target-dir="src/org/cloudsky/cordovaPlugins" />        
         <source-file src="android/ZBarcodeFormat.java" target-dir="src/org/cloudsky/cordovaPlugins" />
