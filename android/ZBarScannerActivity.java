@@ -26,10 +26,12 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+//import android.widget.TextView;
 import android.content.pm.PackageManager;
 import android.view.Surface;
-
+import android.widget.Button;
+import android.widget.ImageView ;
+import android.widget.LinearLayout ;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +44,14 @@ import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 import net.sourceforge.zbar.Config;
+
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Bitmap;
+//import ion.com.dmo2.R;
+import android.graphics.Rect;
+import android.view.TouchDelegate;
 
 public class ZBarScannerActivity extends Activity
 implements SurfaceHolder.Callback {
@@ -90,20 +100,38 @@ implements SurfaceHolder.Callback {
     @Override
     public void onCreate (Bundle savedInstanceState) {
 
-
         int permissionCheck = ContextCompat.checkSelfPermission(this.getBaseContext(), Manifest.permission.CAMERA);
-
         if(permissionCheck == PackageManager.PERMISSION_GRANTED){
-
             setUpCamera();
-
         } else {
-
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     CAMERA_PERMISSION_REQUEST);
         }
+
+        //To increase the clickable area of the button
+        FrameLayout parentView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
+          parentView.post(new Runnable() {
+            @Override
+            public void run() {
+                Rect delegateArea = new Rect();
+                Button myButton = (Button) findViewById(getResourceId("id/back"));
+                myButton.setEnabled(true);
+                myButton.getHitRect(delegateArea);
+                delegateArea.top -= 25;
+                delegateArea.left -= 25;
+                delegateArea.right += 50;
+                delegateArea.bottom += 50;
+
+                TouchDelegate touchDelegate = new TouchDelegate(delegateArea,myButton);
+
+                if (View.class.isInstance(myButton.getParent())) {
+                    ((View) myButton.getParent()).setTouchDelegate(touchDelegate);
+                }
+            }
+        });
         super.onCreate(savedInstanceState);
+        //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
 
 
     }
@@ -115,7 +143,6 @@ implements SurfaceHolder.Callback {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setUpCamera();
                 } else {
-
                    onBackPressed();
                 }
                 return;
@@ -128,16 +155,15 @@ implements SurfaceHolder.Callback {
     private void setUpCamera() {
         // If request is cancelled, the result arrays are empty.
 
-
             // Get parameters from JS
             Intent startIntent = getIntent();
             String paramStr = startIntent.getStringExtra(EXTRA_PARAMS);
             JSONObject params;
             try { params = new JSONObject(paramStr); }
             catch (JSONException e) { params = new JSONObject(); }
-            String textTitle = params.optString("text_title");
-            String textInstructions = params.optString("text_instructions");
-            Boolean drawSight = params.optBoolean("drawSight", true);
+          //  String textTitle = params.optString("text_title");
+           // String textInstructions = params.optString("text_instructions");
+            //Boolean drawSight = params.optBoolean("drawSight", true);
             whichCamera = params.optString("camera");
             flashMode = params.optString("flash");
 
@@ -154,17 +180,24 @@ implements SurfaceHolder.Callback {
 
             // Set content view
             setContentView(getResourceId("layout/cszbarscanner"));
+            Button button = (Button) findViewById(getResourceId("id/back"));
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                    //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
+                }
+            });
 
             // Update view with customisable strings
-            TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
-            TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
-            view_textTitle.setText(textTitle);
-            view_textInstructions.setText(textInstructions);
+            //TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
+            //TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
+            //view_textTitle.setText(textTitle);
+            //view_textInstructions.setText(textInstructions);
 
             // Draw/hide the sight
-            if(!drawSight) {
-                findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
-            }
+            // if(!drawSight) {
+            //     findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
+            // }
 
             // Create preview SurfaceView
             scannerSurface = new SurfaceView (this) {
@@ -186,10 +219,18 @@ implements SurfaceHolder.Callback {
             FrameLayout scannerView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
             scannerView.addView(scannerSurface);
 
-            findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
+            CustomView tcanvas=new CustomView(this);
+            scannerView.addView(tcanvas);
+
+            Bitmap bitmap= Bitmap.createBitmap(440,587,Bitmap.Config.ARGB_8888);
+            ImageView scanImg = (ImageView) findViewById(getResourceId("id/scanQrCode"));
+            scanImg.bringToFront();
+
+            findViewById(getResourceId("id/back")).bringToFront();
+            //findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
+            //findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
+            //findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
+           // findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
             scannerView.requestLayout();
             scannerView.invalidate();
 
@@ -223,6 +264,7 @@ implements SurfaceHolder.Callback {
             return;
         }
     }
+    
     private void setCameraDisplayOrientation(Activity activity ,int cameraId) {
         android.hardware.Camera.CameraInfo info =
                 new android.hardware.Camera.CameraInfo();
@@ -267,6 +309,7 @@ implements SurfaceHolder.Callback {
     {
         setResult(RESULT_CANCELED);
         super.onBackPressed();
+        //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
     }
 
     // SurfaceHolder.Callback implementation ---------------------------
@@ -408,12 +451,12 @@ implements SurfaceHolder.Callback {
                 SymbolSet syms = scanner.getResults();
                 for (Symbol sym : syms) {
                     qrValue = sym.getData();
-
                     // Return 1st found QR code value to the calling Activity.
                     Intent result = new Intent ();
                     result.putExtra(EXTRA_QRVALUE, qrValue);
                     setResult(Activity.RESULT_OK, result);
                     finish();
+                    //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
                 }
 
             }
@@ -427,6 +470,7 @@ implements SurfaceHolder.Callback {
     {
         setResult(RESULT_ERROR);
         finish();
+        //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
     }
 
     private int getResourceId (String typeAndName)
@@ -461,17 +505,19 @@ implements SurfaceHolder.Callback {
 
         if(previewRatio > surfaceRatio) {
             scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
-                surfW,
-                Math.round((float) surfW / previewRatio),
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 Gravity.CENTER
             ));
         } else if(previewRatio < surfaceRatio) {
             scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
-                Math.round((float) surfH * previewRatio),
-                surfH,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 Gravity.CENTER
             ));
         }
+
+        
     }
 
     // Stop the camera preview safely.
@@ -551,4 +597,9 @@ implements SurfaceHolder.Callback {
             }
         }
     }
+
 }
+
+
+
+
