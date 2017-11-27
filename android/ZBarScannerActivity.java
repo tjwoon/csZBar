@@ -26,11 +26,11 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+//import android.widget.TextView;
 import android.content.pm.PackageManager;
 import android.view.Surface;
 import android.widget.Button;
-import	android.widget.ImageView ;
+import android.widget.ImageView ;
 import android.widget.LinearLayout ;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Bitmap;
-import ion.com.dmo2.R;
+//import ion.com.dmo2.R;
 import android.graphics.Rect;
 import android.view.TouchDelegate;
 
@@ -108,12 +108,10 @@ implements SurfaceHolder.Callback {
                     new String[]{Manifest.permission.CAMERA},
                     CAMERA_PERMISSION_REQUEST);
         }
-        super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
 
         //To increase the clickable area of the button
         FrameLayout parentView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
-         parentView.post(new Runnable() {
+          parentView.post(new Runnable() {
             @Override
             public void run() {
                 Rect delegateArea = new Rect();
@@ -132,6 +130,10 @@ implements SurfaceHolder.Callback {
                 }
             }
         });
+        super.onCreate(savedInstanceState);
+        //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
+
+
     }
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -159,9 +161,9 @@ implements SurfaceHolder.Callback {
             JSONObject params;
             try { params = new JSONObject(paramStr); }
             catch (JSONException e) { params = new JSONObject(); }
-            String textTitle = params.optString("text_title");
-            String textInstructions = params.optString("text_instructions");
-            Boolean drawSight = params.optBoolean("drawSight", true);
+          //  String textTitle = params.optString("text_title");
+           // String textInstructions = params.optString("text_instructions");
+            //Boolean drawSight = params.optBoolean("drawSight", true);
             whichCamera = params.optString("camera");
             flashMode = params.optString("flash");
 
@@ -182,7 +184,7 @@ implements SurfaceHolder.Callback {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     finish();
-                    overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
+                    //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
                 }
             });
 
@@ -193,10 +195,9 @@ implements SurfaceHolder.Callback {
             //view_textInstructions.setText(textInstructions);
 
             // Draw/hide the sight
-            if(!drawSight) {
-                findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
-            }
-
+            // if(!drawSight) {
+            //     findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
+            // }
 
             // Create preview SurfaceView
             scannerSurface = new SurfaceView (this) {
@@ -222,12 +223,14 @@ implements SurfaceHolder.Callback {
             scannerView.addView(tcanvas);
 
             Bitmap bitmap= Bitmap.createBitmap(440,587,Bitmap.Config.ARGB_8888);
+            ImageView scanImg = (ImageView) findViewById(getResourceId("id/scanQrCode"));
+            scanImg.bringToFront();
 
             findViewById(getResourceId("id/back")).bringToFront();
             //findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
             //findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
             //findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
+           // findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
             scannerView.requestLayout();
             scannerView.invalidate();
 
@@ -261,6 +264,7 @@ implements SurfaceHolder.Callback {
             return;
         }
     }
+    
     private void setCameraDisplayOrientation(Activity activity ,int cameraId) {
         android.hardware.Camera.CameraInfo info =
                 new android.hardware.Camera.CameraInfo();
@@ -305,7 +309,7 @@ implements SurfaceHolder.Callback {
     {
         setResult(RESULT_CANCELED);
         super.onBackPressed();
-        overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
+        //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
     }
 
     // SurfaceHolder.Callback implementation ---------------------------
@@ -447,13 +451,12 @@ implements SurfaceHolder.Callback {
                 SymbolSet syms = scanner.getResults();
                 for (Symbol sym : syms) {
                     qrValue = sym.getData();
-
                     // Return 1st found QR code value to the calling Activity.
                     Intent result = new Intent ();
                     result.putExtra(EXTRA_QRVALUE, qrValue);
                     setResult(Activity.RESULT_OK, result);
                     finish();
-                    overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
+                    //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
                 }
 
             }
@@ -467,7 +470,7 @@ implements SurfaceHolder.Callback {
     {
         setResult(RESULT_ERROR);
         finish();
-        overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
+        //overridePendingTransition(R.anim.pull_up_from_bottom, R.anim.push_out_to_bottom);
     }
 
     private int getResourceId (String typeAndName)
