@@ -44,19 +44,19 @@
             <color name="csZbarScannerBackground">#000000</color>
         </config-file>
         <framework src="com.android.support:support-v4:23.1.0" />
-        <resource-file src="android/res/layout/cszbarscanner.xml" target="app/src/main/res/layout/cszbarscanner.xml" />
+        <resource-file src="android/res/layout/cszbarscanner.xml" target="res/layout/cszbarscanner.xml" />
         <source-file src="android/ZBarcodeFormat.java" target-dir="app/src/main/java/org/cloudsky/cordovaPlugins" />
         <source-file src="android/ZBar.java" target-dir="app/src/main/java/org/cloudsky/cordovaPlugins" />
         <source-file src="android/ZBarScannerActivity.java" target-dir="app/src/main/java/org/cloudsky/cordovaPlugins" />
         <source-file src="android/libs/zbar.jar" target-dir="app/libs" />
-        <source-file src="android/libs/armeabi/libiconv.so" target-dir="app/src/main/libs/armeabi" />
-        <source-file src="android/libs/armeabi/libzbarjni.so" target-dir="app/src/main/libs/armeabi" />
-        <source-file src="android/libs/armeabi-v7a/libiconv.so" target-dir="app/src/main/libs/armeabi-v7a" />
-        <source-file src="android/libs/armeabi-v7a/libzbarjni.so" target-dir="app/src/main/libs/armeabi-v7a" />
-        <source-file src="android/libs/arm64-v8a/libiconv.so" target-dir="app/src/main/libs/arm64-v8a" />
-        <source-file src="android/libs/arm64-v8a/libzbarjni.so" target-dir="app/src/main/libs/arm64-v8a" />s
-        <source-file src="android/libs/x86/libiconv.so" target-dir="app/src/main/libs/x86" />
-        <source-file src="android/libs/x86/libzbarjni.so" target-dir="app/src/main/libs/x86" />
+        <source-file src="android/libs/armeabi/libiconv.so" target-dir="app/src/main/jniLibs/armeabi" />
+        <source-file src="android/libs/armeabi/libzbarjni.so" target-dir="app/src/main/jniLibs/armeabi" />
+        <source-file src="android/libs/armeabi-v7a/libiconv.so" target-dir="app/src/main/jniLibs/armeabi-v7a" />
+        <source-file src="android/libs/armeabi-v7a/libzbarjni.so" target-dir="app/src/main/jniLibs/armeabi-v7a" />
+        <source-file src="android/libs/arm64-v8a/libiconv.so" target-dir="app/src/main/jniLibs/arm64-v8a" />
+        <source-file src="android/libs/arm64-v8a/libzbarjni.so" target-dir="app/src/main/jniLibs/arm64-v8a" />
+        <source-file src="android/libs/x86/libiconv.so" target-dir="app/src/main/jniLibs/x86" />
+        <source-file src="android/libs/x86/libzbarjni.so" target-dir="app/src/main/jniLibs/x86" />
         <source-file src="android/res/drawable/camera_flash.png" target-dir="app/src/main/res/drawable"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="app/src/main/res/drawable-hdpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="app/src/main/res/drawable-ldpi"/>
