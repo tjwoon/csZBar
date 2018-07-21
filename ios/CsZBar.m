@@ -71,6 +71,7 @@
             self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeAuto;
         }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 110000
         // Hack to hide the bottom bar's Info button... originally based on http://stackoverflow.com/a/16353530
 	NSInteger infoButtonIndex;
         if ([[[UIDevice currentDevice] systemVersion] compare:@"10.0" options:NSNumericSearch] != NSOrderedAscending) {
@@ -80,6 +81,7 @@
         }
         UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:2] subviews] objectAtIndex:0] subviews] objectAtIndex:infoButtonIndex];
         [infoButton setHidden:YES];
+#endif
 
         //UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem]; [button setTitle:@"Press Me" forState:UIControlStateNormal]; [button sizeToFit]; [self.view addSubview:button];
         CGRect screenRect = [[UIScreen mainScreen] bounds];
@@ -92,8 +94,20 @@
         //The bar length it depends on the orientation
         toolbarViewFlash.frame = CGRectMake(0.0, 0, (screenWidth > screenHeight ?screenWidth:screenHeight), 44.0);
         toolbarViewFlash.barStyle = UIBarStyleBlackOpaque;
-        UIBarButtonItem *buttonFlash = [[UIBarButtonItem alloc] initWithTitle:@"Flash" style:UIBarButtonItemStyleDone target:self action:@selector(toggleflash)];
+//        UIBarButtonItem *buttonFlash = [[UIBarButtonItem alloc] initWithTitle:@"Flash" style:UIBarButtonItemStyleDone target:self action:@selector(toggleflash)];
         
+
+        NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:@"ZBar" withExtension:@"bundle"];
+        NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
+        NSString *imagePath = [bundle pathForResource:@"torch" ofType:@"png"];
+        UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+        
+        UIBarButtonItem *buttonFlash = [[UIBarButtonItem alloc]
+                                        initWithImage:image
+                                        style:UIBarButtonItemStylePlain
+                                        target:(id)self
+                                        action:@selector(toggleflash)];
+
         NSArray *buttons = [NSArray arrayWithObjects: buttonFlash, nil];
         [toolbarViewFlash setItems:buttons animated:NO];
         [self.scanReader.view addSubview:toolbarViewFlash];
