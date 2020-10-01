@@ -1,4 +1,4 @@
-**This repository is unmaintained**
+**This repository is unmaintained. Thank you to all collaborators who have helped to maintain it so far.**
 
 ~~**This repository is looking for a maintainer! If you believe you are the right person, please [leave a comment](https://github.com/tjwoon/csZBar/issues/60)!**~~
 
