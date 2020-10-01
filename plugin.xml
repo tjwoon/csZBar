@@ -58,11 +58,11 @@
         <source-file src="android/libs/x86/libiconv.so" target-dir="libs/x86" />
         <source-file src="android/libs/x86/libzbarjni.so" target-dir="libs/x86" />
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-hdpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-ldpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-mdpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xhdpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
+        <source-file src="android/res/drawable-hdpi/camera_flash.png" target-dir="res/drawable-hdpi"/>
+        <source-file src="android/res/drawable-ldpi/camera_flash.png" target-dir="res/drawable-ldpi"/>
+        <source-file src="android/res/drawable-mdpi/camera_flash.png" target-dir="res/drawable-mdpi"/>
+        <source-file src="android/res/drawable-xhdpi/camera_flash.png" target-dir="res/drawable-xhdpi"/>
+        <source-file src="android/res/drawable-xxhdpi/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
     </platform>
 
     <platform name="ios">
@@ -108,6 +108,7 @@
         <header-file src="ios/ZBarSDK/zbar/Video.h" />
         <header-file src="ios/ZBarSDK/zbar/Window.h" />
         <resource-file src="ios/Resources/CsZBarScanView.xib" />
+        <resource-file src="ios/ZBar.bundle"/>
     </platform>
 
 </plugin>
