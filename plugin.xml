@@ -24,10 +24,10 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="application">
-        <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-                android:name="org.cloudsky.cordovaPlugins.ZBarScannerActivity"
-                android:screenOrientation="fullUser"
-                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+            <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+                      android:name="org.cloudsky.cordovaPlugins.ZBarScannerActivity"
+                      android:screenOrientation="fullUser"
+                      android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-feature android:name="android.hardware.camera" />
@@ -57,6 +57,8 @@
         <source-file src="android/libs/arm64-v8a/libzbarjni.so" target-dir="libs/arm64-v8a" />s
         <source-file src="android/libs/x86/libiconv.so" target-dir="libs/x86" />
         <source-file src="android/libs/x86/libzbarjni.so" target-dir="libs/x86" />
+        <source-file src="android/libs/x86_64/libiconv.so" target-dir="libs/x86_64" />
+        <source-file src="android/libs/x86_64/libzbarjni.so" target-dir="libs/x86_64" />
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-hdpi"/>
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-ldpi"/>
