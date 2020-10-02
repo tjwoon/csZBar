@@ -35,6 +35,24 @@
 
 #pragma mark - Plugin API
 
++ (UIView*) searchToolbarFrom:(UIView*) topView {
+    UIView* result = nil;
+    for (UIView* testView in topView.subviews) {
+        if([testView isKindOfClass:[UIToolbar class]]){
+            result = testView;
+            break;
+        } else {
+            if ([testView.subviews count] > 0){
+                result = [self searchToolbarFrom:testView];
+                if (result != nil){
+                    break;
+                }
+            }
+        }
+    }
+    return result;
+};
+
 - (void)scan: (CDVInvokedUrlCommand*)command; 
 {
     if (self.scanInProgress) {
@@ -49,7 +67,7 @@
         self.scanReader = [AlmaZBarReaderViewController new];
 
         self.scanReader.readerDelegate = self;
-        self.scanReader.supportedOrientationsMask = ZBarOrientationMask(UIInterfaceOrientationPortrait);
+        self.scanReader.supportedOrientationsMask = ZBarOrientationMask(UIInterfaceOrientationPortrait || UIDeviceOrientationLandscapeRight || UIDeviceOrientationLandscapeLeft);
 
         // Get user parameters
         NSDictionary *params = (NSDictionary*) [command argumentAtIndex:0];
@@ -72,16 +90,22 @@
         }
 
         // Hack to hide the bottom bar's Info button... originally based on http://stackoverflow.com/a/16353530
-	NSInteger infoButtonIndex;
-        if ([[[UIDevice currentDevice] systemVersion] compare:@"10.0" options:NSNumericSearch] != NSOrderedAscending) {
-            infoButtonIndex = 1;
-        } else {
-            infoButtonIndex = 3;
-        }
-        UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:2] subviews] objectAtIndex:0] subviews] objectAtIndex:infoButtonIndex];
-        [infoButton setHidden:YES];
 
-        //UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem]; [button setTitle:@"Press Me" forState:UIControlStateNormal]; [button sizeToFit]; [self.view addSubview:button];
+        UIView* testView = self.scanReader.view;
+        UIView* toolBar = [[self class] searchToolbarFrom:testView];
+        
+        for (UIBarButtonItem* item  in ((UIToolbar*)toolBar).items) {
+            if (item.customView != nil){
+                if([item.customView isKindOfClass:[UIButton class]]){
+                    UIButton* but = (UIButton*)item.customView;
+                    if (but.buttonType == UIButtonTypeInfoLight
+                        || but.buttonType == UIButtonTypeInfoDark){
+                        but.hidden = YES;
+                    }
+                }
+            }
+        }
+
         CGRect screenRect = [[UIScreen mainScreen] bounds];
         CGFloat screenWidth = screenRect.size.width;
         CGFloat screenHeight = screenRect.size.height;
