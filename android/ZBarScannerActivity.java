@@ -201,18 +201,18 @@ implements SurfaceHolder.Callback {
         super.onResume();
 
         try {
-            if(whichCamera.equals("front")) {
-                int numCams = Camera.getNumberOfCameras();
-                CameraInfo cameraInfo = new CameraInfo();
-                for(int i=0; i<numCams; i++) {
-                    Camera.getCameraInfo(i, cameraInfo);
-                    if(cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT) {
-                        camera = Camera.open(i);
-                    }
+        if (whichCamera.equals("front")) {
+            int numCams = Camera.getNumberOfCameras();
+            CameraInfo cameraInfo = new CameraInfo();
+            for(int i=0; i<numCams; i++) {
+                Camera.getCameraInfo(i, cameraInfo);
+                if(cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT) {
+                    camera = Camera.open(i);
                 }
-            } else {
-                camera = Camera.open();
             }
+        } else {
+            camera = Camera.open();
+        }
 
             if(camera == null) throw new Exception ("Error: No suitable camera found.");
         } catch (RuntimeException e) {

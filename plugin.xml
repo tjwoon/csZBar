@@ -54,15 +54,17 @@
         <source-file src="android/libs/armeabi-v7a/libiconv.so" target-dir="libs/armeabi-v7a" />
         <source-file src="android/libs/armeabi-v7a/libzbarjni.so" target-dir="libs/armeabi-v7a" />
         <source-file src="android/libs/arm64-v8a/libiconv.so" target-dir="libs/arm64-v8a" />
-        <source-file src="android/libs/arm64-v8a/libzbarjni.so" target-dir="libs/arm64-v8a" />s
+        <source-file src="android/libs/arm64-v8a/libzbarjni.so" target-dir="libs/arm64-v8a" />
         <source-file src="android/libs/x86/libiconv.so" target-dir="libs/x86" />
         <source-file src="android/libs/x86/libzbarjni.so" target-dir="libs/x86" />
+        <source-file src="android/libs/x86_64/libiconv.so" target-dir="libs/x86_64" />
+        <source-file src="android/libs/x86_64/libzbarjni.so" target-dir="libs/x86_64" />
         <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-hdpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-ldpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-mdpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xhdpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
+        <source-file src="android/res/drawable-hdpi/camera_flash.png" target-dir="res/drawable-hdpi"/>
+        <source-file src="android/res/drawable-ldpi/camera_flash.png" target-dir="res/drawable-ldpi"/>
+        <source-file src="android/res/drawable-mdpi/camera_flash.png" target-dir="res/drawable-mdpi"/>
+        <source-file src="android/res/drawable-xhdpi/camera_flash.png" target-dir="res/drawable-xhdpi"/>
+        <source-file src="android/res/drawable-xxhdpi/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
     </platform>
 
     <platform name="ios">
@@ -76,11 +78,15 @@
         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
             <string>For Barcode Scanning</string>
         </config-file>
+        <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+            <string>For Barcode Scanning</string>
+        </config-file>
 
         <framework src="AVFoundation.framework" />
         <framework src="CoreMedia.framework" />
         <framework src="CoreVideo.framework" />
         <framework src="QuartzCore.framework" />
+        <framework src="WebKit.framework" weak="true" />
         <framework src="libiconv.dylib" />
         <source-file src="ios/libzbar.a" framework="true" custom="true"/>
         <source-file src="ios/CsZBar.m" />
@@ -108,6 +114,7 @@
         <header-file src="ios/ZBarSDK/zbar/Video.h" />
         <header-file src="ios/ZBarSDK/zbar/Window.h" />
         <resource-file src="ios/Resources/CsZBarScanView.xib" />
+        <resource-file src="ios/ZBar.bundle"/>
     </platform>
 
 </plugin>
