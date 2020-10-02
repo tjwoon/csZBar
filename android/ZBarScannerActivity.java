@@ -15,6 +15,7 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -201,19 +202,7 @@ implements SurfaceHolder.Callback {
         super.onResume();
 
         try {
-            if(whichCamera.equals("front")) {
-                int numCams = Camera.getNumberOfCameras();
-                CameraInfo cameraInfo = new CameraInfo();
-                for(int i=0; i<numCams; i++) {
-                    Camera.getCameraInfo(i, cameraInfo);
-                    if(cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT) {
-                        camera = Camera.open(i);
-                    }
-                }
-            } else {
-                camera = Camera.open();
-            }
-
+            ensureCameraIsOpen();
             if(camera == null) throw new Exception ("Error: No suitable camera found.");
         } catch (RuntimeException e) {
             //die("Error: Could not open the camera.");
@@ -223,7 +212,29 @@ implements SurfaceHolder.Callback {
             return;
         }
     }
+
+    private void ensureCameraIsOpen() {
+        if (whichCamera.equals("front")) {
+            int numCams = Camera.getNumberOfCameras();
+            CameraInfo cameraInfo = new CameraInfo();
+            for(int i=0; i<numCams; i++) {
+                Camera.getCameraInfo(i, cameraInfo);
+                if(cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT) {
+                    camera = Camera.open(i);
+                }
+            }
+        } else {
+            camera = Camera.open();
+        }
+    }
+
     private void setCameraDisplayOrientation(Activity activity ,int cameraId) {
+        ensureCameraIsOpen();
+        if (camera == null) {
+            Log.w(this.getClass().getName(), "No suitable camera found");
+            return;
+        }
+
         android.hardware.Camera.CameraInfo info =
                 new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(cameraId, info);
@@ -303,31 +314,7 @@ implements SurfaceHolder.Callback {
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
-        int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        switch(rotation)
-        {
-        case 0: // '\0'
-            rotation = 90;
-            break;
 
-        case 1: // '\001'
-            rotation = 0;
-            break;
-
-        case 2: // '\002'
-            rotation = 270;
-            break;
-
-        case 3: // '\003'
-            rotation = 180;
-            break;
-
-        default:
-            rotation = 90;
-            break;
-        }
-        camera.setDisplayOrientation(rotation);
-        android.hardware.Camera.Parameters params = camera.getParameters();
         tryStopPreview();
         tryStartPreview();
 
