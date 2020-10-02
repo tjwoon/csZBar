@@ -38,7 +38,6 @@ public class ZBar extends CordovaPlugin {
                 isInProgress = true;
                 scanCallbackContext = callbackContext;
                 JSONObject params = args.optJSONObject(0);
-
                 Context appCtx = cordova.getActivity().getApplicationContext();
                 Intent scanIntent = new Intent(appCtx, ZBarScannerActivity.class);
                 scanIntent.putExtra(ZBarScannerActivity.EXTRA_PARAMS, params.toString());

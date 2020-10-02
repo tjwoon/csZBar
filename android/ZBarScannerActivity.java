@@ -29,7 +29,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.content.pm.PackageManager;
 import android.view.Surface;
-
+import android.widget.Button;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +43,9 @@ import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 import net.sourceforge.zbar.Config;
+
+import android.graphics.Rect;
+import android.view.TouchDelegate;
 
 public class ZBarScannerActivity extends Activity
 implements SurfaceHolder.Callback {
@@ -90,22 +94,15 @@ implements SurfaceHolder.Callback {
     @Override
     public void onCreate (Bundle savedInstanceState) {
 
-
         int permissionCheck = ContextCompat.checkSelfPermission(this.getBaseContext(), Manifest.permission.CAMERA);
-
         if(permissionCheck == PackageManager.PERMISSION_GRANTED){
-
             setUpCamera();
-
         } else {
-
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     CAMERA_PERMISSION_REQUEST);
         }
         super.onCreate(savedInstanceState);
-
-
     }
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -120,53 +117,28 @@ implements SurfaceHolder.Callback {
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
     private void setUpCamera() {
-        // If request is cancelled, the result arrays are empty.
-
-
-            // Get parameters from JS
+  
             Intent startIntent = getIntent();
             String paramStr = startIntent.getStringExtra(EXTRA_PARAMS);
             JSONObject params;
             try { params = new JSONObject(paramStr); }
             catch (JSONException e) { params = new JSONObject(); }
-            String textTitle = params.optString("text_title");
-            String textInstructions = params.optString("text_instructions");
-            Boolean drawSight = params.optBoolean("drawSight", true);
             whichCamera = params.optString("camera");
-            flashMode = params.optString("flash");
 
-            // Initiate instance variables
             autoFocusHandler = new Handler();
             scanner = new ImageScanner();
             scanner.setConfig(0, Config.X_DENSITY, 3);
             scanner.setConfig(0, Config.Y_DENSITY, 3);
 
-            // Set the config for barcode formats
             for(ZBarcodeFormat format : getFormats()) {
                 scanner.setConfig(format.getId(), Config.ENABLE, 1);
             }
 
-            // Set content view
             setContentView(getResourceId("layout/cszbarscanner"));
 
-            // Update view with customisable strings
-            TextView view_textTitle = (TextView) findViewById(getResourceId("id/csZbarScannerTitle"));
-            TextView view_textInstructions = (TextView) findViewById(getResourceId("id/csZbarScannerInstructions"));
-            view_textTitle.setText(textTitle);
-            view_textInstructions.setText(textInstructions);
-
-            // Draw/hide the sight
-            if(!drawSight) {
-                findViewById(getResourceId("id/csZbarScannerSight")).setVisibility(View.INVISIBLE);
-            }
-
-            // Create preview SurfaceView
             scannerSurface = new SurfaceView (this) {
                 @Override
                 public void onSizeChanged (int w, int h, int oldW, int oldH) {
@@ -184,12 +156,26 @@ implements SurfaceHolder.Callback {
 
             // Add preview SurfaceView to the screen
             FrameLayout scannerView = (FrameLayout) findViewById(getResourceId("id/csZbarScannerView"));
+            scannerView.post(new Runnable() {
+              @Override
+              public void run() {
+                  Rect delegateArea = new Rect();
+                  Button myButton = (Button) findViewById(getResourceId("id/back"));
+                  myButton.bringToFront();
+                  myButton.setEnabled(true);
+                  myButton.getHitRect(delegateArea);
+                  delegateArea.top -= 25;
+                  delegateArea.left -= 25;
+                  delegateArea.right += 50;
+                  delegateArea.bottom += 50;
+                  TouchDelegate touchDelegate = new TouchDelegate(delegateArea,myButton);
+                  if (View.class.isInstance(myButton.getParent())) {
+                      ((View) myButton.getParent()).setTouchDelegate(touchDelegate);
+                  }
+                }
+            });
             scannerView.addView(scannerSurface);
-
-            findViewById(getResourceId("id/csZbarScannerTitle")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerInstructions")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerSightContainer")).bringToFront();
-            findViewById(getResourceId("id/csZbarScannerSight")).bringToFront();
+	    findViewById(getResourceId("id/scanQrCode")).bringToFront();
             scannerView.requestLayout();
             scannerView.invalidate();
 
@@ -333,42 +319,6 @@ implements SurfaceHolder.Callback {
 
     }
 
-    public void toggleFlash(View view) {
-		camera.startPreview();
-        android.hardware.Camera.Parameters camParams = camera.getParameters();
-        //If the flash is set to off
-        try {
-            if (camParams.getFlashMode().equals(Parameters.FLASH_MODE_OFF) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_TORCH)) && !(camParams.getFlashMode().equals(Parameters.FLASH_MODE_ON)))
-                camParams.setFlashMode(Parameters.FLASH_MODE_TORCH);
-            else //if(camParams.getFlashMode() == Parameters.FLASH_MODE_ON || camParams.getFlashMode()== Parameters.FLASH_MODE_TORCH)
-                camParams.setFlashMode(Parameters.FLASH_MODE_OFF);
-        }   catch(RuntimeException e) {
-
-        }
-
-		try {
-           // camera.setParameters(camParams);
-            camera.setPreviewDisplay(holder);
-            camera.setPreviewCallback(previewCb);
-            camera.startPreview();
-            if (android.os.Build.VERSION.SDK_INT >= 14) {
-                camera.autoFocus(autoFocusCb); // We are not using any of the
-                    // continuous autofocus modes as that does not seem to work
-                    // well with flash setting of "on"... At least with this
-                    // simple and stupid focus method, we get to turn the flash
-                    // on during autofocus.
-                camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-            }
-            //tryStopPreview();
-            //tryStartPreview();
-            //camParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-            camera.setParameters(camParams);
-        } catch(RuntimeException e) {
-            Log.d("csZBar", (new StringBuilder("Unsupported camera parameter reported for flash mode: ")).append(flashMode).toString());
-        } catch (IOException e) {
-        	Log.d("csZBar", (new StringBuilder("Wrong holder data")).append(flashMode).toString());
-		}
-    }
     // Continuously auto-focus -----------------------------------------
     // For API Level < 14
 
@@ -458,20 +408,11 @@ implements SurfaceHolder.Callback {
         Camera.Size size = params.getPreviewSize();
         float previewRatio = (float) size.height / size.width; // swap h and w as the preview is rotated 90 degrees
         float surfaceRatio = (float) surfW / surfH;
-
-        if(previewRatio > surfaceRatio) {
-            scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
-                surfW,
-                Math.round((float) surfW / previewRatio),
-                Gravity.CENTER
-            ));
-        } else if(previewRatio < surfaceRatio) {
-            scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
-                Math.round((float) surfH * previewRatio),
-                surfH,
-                Gravity.CENTER
-            ));
-        }
+        scannerSurface.setLayoutParams(new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            Gravity.CENTER
+        ));
     }
 
     // Stop the camera preview safely.
@@ -540,15 +481,16 @@ implements SurfaceHolder.Callback {
                 camera.startPreview();
 
                 if (android.os.Build.VERSION.SDK_INT >= 14) {
-                    camera.autoFocus(autoFocusCb); // We are not using any of the
-                        // continuous autofocus modes as that does not seem to work
-                        // well with flash setting of "on"... At least with this
-                        // simple and stupid focus method, we get to turn the flash
-                        // on during autofocus.
+                    camera.autoFocus(autoFocusCb); 
                 }
             } catch (IOException e) {
                 die("Could not start camera preview: " + e.getMessage());
             }
         }
+    }
+
+    public void back(View view) {
+       setResult(RESULT_CANCELED);
+        super.onBackPressed();
     }
 }
