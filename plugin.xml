@@ -24,10 +24,10 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="application">
-        <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-                android:name="org.cloudsky.cordovaPlugins.ZBarScannerActivity"
-                android:screenOrientation="fullUser"
-                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+          <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+                  android:name="org.cloudsky.cordovaPlugins.ZBarScannerActivity"
+                  android:screenOrientation="fullUser"
+                  android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-feature android:name="android.hardware.camera" />
@@ -44,25 +44,27 @@
             <color name="csZbarScannerBackground">#000000</color>
         </config-file>
         <framework src="com.android.support:support-v4:23.1.0" />
-        <resource-file src="android/res/layout/cszbarscanner.xml" target="res/layout/cszbarscanner.xml" />
         <source-file src="android/ZBarcodeFormat.java" target-dir="src/org/cloudsky/cordovaPlugins" />
         <source-file src="android/ZBar.java" target-dir="src/org/cloudsky/cordovaPlugins" />
         <source-file src="android/ZBarScannerActivity.java" target-dir="src/org/cloudsky/cordovaPlugins" />
-        <source-file src="android/libs/zbar.jar" target-dir="libs" />
-        <source-file src="android/libs/armeabi/libiconv.so" target-dir="libs/armeabi" />
-        <source-file src="android/libs/armeabi/libzbarjni.so" target-dir="libs/armeabi" />
-        <source-file src="android/libs/armeabi-v7a/libiconv.so" target-dir="libs/armeabi-v7a" />
-        <source-file src="android/libs/armeabi-v7a/libzbarjni.so" target-dir="libs/armeabi-v7a" />
-        <source-file src="android/libs/arm64-v8a/libiconv.so" target-dir="libs/arm64-v8a" />
-        <source-file src="android/libs/arm64-v8a/libzbarjni.so" target-dir="libs/arm64-v8a" />s
-        <source-file src="android/libs/x86/libiconv.so" target-dir="libs/x86" />
-        <source-file src="android/libs/x86/libzbarjni.so" target-dir="libs/x86" />
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-hdpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-ldpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-mdpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xhdpi"/>
-        <source-file src="android/res/drawable/camera_flash.png" target-dir="res/drawable-xxhdpi"/>
+        <lib-file src="android/libs/zbar.jar" />
+        <!-- jniLibs -->
+        <resource-file src="android/jniLibs/armeabi/libiconv.so" target="jniLibs/armeabi/libiconv.so" />
+        <resource-file src="android/jniLibs/armeabi/libzbarjni.so" target="jniLibs/armeabi/libzbarjni.so" />
+        <resource-file src="android/jniLibs/armeabi-v7a/libiconv.so" target="jniLibs/armeabi-v7a/libiconv.so" />
+        <resource-file src="android/jniLibs/armeabi-v7a/libzbarjni.so" target="jniLibs/armeabi-v7a/libzbarjni.so" />
+        <resource-file src="android/jniLibs/arm64-v8a/libiconv.so" target="jniLibs/arm64-v8a/libiconv.so" />
+        <resource-file src="android/jniLibs/arm64-v8a/libzbarjni.so" target="jniLibs/arm64-v8a/libzbarjni.so" />
+        <resource-file src="android/jniLibs/x86/libiconv.so" target="jniLibs/x86/libiconv.so" />
+        <resource-file src="android/jniLibs/x86/libzbarjni.so" target="jniLibs/x86/libzbarjni.so" />
+        <!-- resources -->
+        <resource-file src="android/res/layout/cszbarscanner.xml" target="res/layout/cszbarscanner.xml" />
+        <resource-file src="android/res/drawable/camera_flash.png" target="res/drawable/camera_flash.png"/>
+        <resource-file src="android/res/drawable-hdpi/camera_flash.png" target="res/drawable-hdpi/camera_flash.png"/>
+        <resource-file src="android/res/drawable-ldpi/camera_flash.png" target="res/drawable-ldpi/camera_flash.png"/>
+        <resource-file src="android/res/drawable-mdpi/camera_flash.png" target="res/drawable-mdpi/camera_flash.png"/>
+        <resource-file src="android/res/drawable-xhdpi/camera_flash.png" target="res/drawable-xhdpi/camera_flash.png"/>
+        <resource-file src="android/res/drawable-xxhdpi/camera_flash.png" target="res/drawable-xxhdpi/camera_flash.png"/>
     </platform>
 
     <platform name="ios">
@@ -108,6 +110,7 @@
         <header-file src="ios/ZBarSDK/zbar/Video.h" />
         <header-file src="ios/ZBarSDK/zbar/Window.h" />
         <resource-file src="ios/Resources/CsZBarScanView.xib" />
+        <resource-file src="ios/ZBar.bundle"/>
     </platform>
 
 </plugin>
