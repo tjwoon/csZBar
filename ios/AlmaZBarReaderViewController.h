@@ -6,7 +6,7 @@
 //
 //
 
-#import "ZBarReaderViewController.h"
+#import <ZBarSDK/ZBarReaderViewController.h>
 
 @interface AlmaZBarReaderViewController : ZBarReaderViewController
 
