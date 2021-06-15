@@ -35,7 +35,25 @@
 
 #pragma mark - Plugin API
 
-- (void)scan: (CDVInvokedUrlCommand*)command; 
++ (UIView*) searchToolbarFrom:(UIView*) topView {
+    UIView* result = nil;
+    for (UIView* testView in topView.subviews) {
+        if([testView isKindOfClass:[UIToolbar class]]){
+            result = testView;
+            break;
+        } else {
+            if ([testView.subviews count] > 0){
+                result = [self searchToolbarFrom:testView];
+                if (result != nil){
+                    break;
+                }
+            }
+        }
+    }
+    return result;
+};
+
+- (void)scan: (CDVInvokedUrlCommand*)command;
 {
     if (self.scanInProgress) {
         [self.commandDelegate
@@ -49,7 +67,7 @@
         self.scanReader = [AlmaZBarReaderViewController new];
 
         self.scanReader.readerDelegate = self;
-        self.scanReader.supportedOrientationsMask = ZBarOrientationMask(UIInterfaceOrientationPortrait);
+        self.scanReader.supportedOrientationsMask = ZBarOrientationMask(UIInterfaceOrientationPortrait || UIDeviceOrientationLandscapeRight || UIDeviceOrientationLandscapeLeft);
 
         // Get user parameters
         NSDictionary *params = (NSDictionary*) [command argumentAtIndex:0];
@@ -62,7 +80,7 @@
         self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeOn;
 
         NSString *flash = [params objectForKey:@"flash"];
-        
+
         if ([flash isEqualToString:@"on"]) {
             self.scanReader.cameraFlashMode = UIImagePickerControllerCameraFlashModeOn;
         } else if ([flash isEqualToString:@"off"]) {
@@ -72,28 +90,34 @@
         }
 
         // Hack to hide the bottom bar's Info button... originally based on http://stackoverflow.com/a/16353530
-	NSInteger infoButtonIndex;
-        if ([[[UIDevice currentDevice] systemVersion] compare:@"10.0" options:NSNumericSearch] != NSOrderedAscending) {
-            infoButtonIndex = 1;
-        } else {
-            infoButtonIndex = 3;
-        }
-        UIView *infoButton = [[[[[self.scanReader.view.subviews objectAtIndex:2] subviews] objectAtIndex:0] subviews] objectAtIndex:infoButtonIndex];
-        [infoButton setHidden:YES];
 
-        //UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem]; [button setTitle:@"Press Me" forState:UIControlStateNormal]; [button sizeToFit]; [self.view addSubview:button];
+        UIView* testView = self.scanReader.view;
+        UIView* toolBar = [[self class] searchToolbarFrom:testView];
+
+        for (UIBarButtonItem* item  in ((UIToolbar*)toolBar).items) {
+            if (item.customView != nil){
+                if([item.customView isKindOfClass:[UIButton class]]){
+                    UIButton* but = (UIButton*)item.customView;
+                    if (but.buttonType == UIButtonTypeInfoLight
+                        || but.buttonType == UIButtonTypeInfoDark){
+                        but.hidden = YES;
+                    }
+                }
+            }
+        }
+
         CGRect screenRect = [[UIScreen mainScreen] bounds];
         CGFloat screenWidth = screenRect.size.width;
         CGFloat screenHeight = screenRect.size.height;
-        
+
         BOOL drawSight = [params objectForKey:@"drawSight"] ? [[params objectForKey:@"drawSight"] boolValue] : true;
         UIToolbar *toolbarViewFlash = [[UIToolbar alloc] init];
-        
+
         //The bar length it depends on the orientation
         toolbarViewFlash.frame = CGRectMake(0.0, 0, (screenWidth > screenHeight ?screenWidth:screenHeight), 44.0);
         toolbarViewFlash.barStyle = UIBarStyleBlackOpaque;
         UIBarButtonItem *buttonFlash = [[UIBarButtonItem alloc] initWithTitle:@"Flash" style:UIBarButtonItemStyleDone target:self action:@selector(toggleflash)];
-        
+
         NSArray *buttons = [NSArray arrayWithObjects: buttonFlash, nil];
         [toolbarViewFlash setItems:buttons animated:NO];
         [self.scanReader.view addSubview:toolbarViewFlash];
@@ -101,7 +125,7 @@
         if (drawSight) {
             CGFloat dim = screenWidth < screenHeight ? screenWidth / 1.1 : screenHeight / 1.1;
             UIView *polygonView = [[UIView alloc] initWithFrame: CGRectMake  ( (screenWidth/2) - (dim/2), (screenHeight/2) - (dim/2), dim, dim)];
-            
+
             UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0,dim / 2, dim, 1)];
             lineView.backgroundColor = [UIColor redColor];
             [polygonView addSubview:lineView];
@@ -115,7 +139,7 @@
 
 - (void)toggleflash {
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    
+
     [device lockForConfiguration:nil];
     if (device.torchAvailable == 1) {
         if (device.torchMode == 0) {
@@ -126,7 +150,7 @@
             [device setFlashMode:AVCaptureFlashModeOff];
         }
     }
-    
+
     [device unlockForConfiguration];
 }
 
@@ -146,9 +170,9 @@
     if ([self.scanReader isBeingDismissed]) {
         return;
     }
-    
+
     id<NSFastEnumeration> results = [info objectForKey: ZBarReaderControllerResults];
-    
+
     ZBarSymbol *symbol = nil;
     for (symbol in results) break; // get the first result
 
