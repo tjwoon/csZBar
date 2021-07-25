@@ -1,6 +1,6 @@
 #import <Cordova/CDV.h>
 
-#import <ZBarSDK/ZBarSDK.h>
+#import <ATBarSDK/ZBarSDK.h>
 #import <UIKit/UIKit.h>
 
 @interface CsZBar : CDVPlugin <ZBarReaderDelegate>
