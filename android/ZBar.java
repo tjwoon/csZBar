@@ -1,4 +1,4 @@
-package org.cloudsky.cordovaPlugins;
+package com.apogeek.cordovaPlugins;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -10,7 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
 
-import org.cloudsky.cordovaPlugins.ZBarScannerActivity;
+import com.apogeek.cordovaPlugins.ZBarScannerActivity;
 
 public class ZBar extends CordovaPlugin {
 

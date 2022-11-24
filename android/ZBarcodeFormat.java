@@ -1,4 +1,4 @@
-package org.cloudsky.cordovaPlugins;
+package com.apogeek.cordovaPlugins;
 
 import net.sourceforge.zbar.Symbol;
 
