@@ -1,4 +1,4 @@
-package org.cloudsky.cordovaPlugins;
+package com.apogeek.cordovaPlugins;
 
 import java.io.IOException;
 import java.lang.RuntimeException;
@@ -17,8 +17,8 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
