@@ -1,10 +1,6 @@
-**This repository is unmaintained. Thank you to all collaborators who have helped to maintain it so far.**
+# ZBar Barcode Scanner Plugin Fork
 
-~~**This repository is looking for a maintainer! If you believe you are the right person, please [leave a comment](https://github.com/tjwoon/csZBar/issues/60)!**~~
-
-
-
-# ZBar Barcode Scanner Plugin
+This is a fork of `cordova-plugin-cszbar` by TJ Woon.
 
 This plugin integrates with the [ZBar](http://zbar.sourceforge.net/) library,
 exposing a JavaScript interface for scanning barcodes (QR Code, EAN-13/UPC-A, UPC-E, EAN-8, Code 128, Code 39, Interleaved 2 of 5, etc).
@@ -12,13 +8,13 @@ In this fork a button has been added to turn off and on device flash. In additio
 
 ## Installation
 
-    cordova plugin add cordova-plugin-cszbar
+    cordova plugin add https://github.com/ApOgEE/csZBar#1.4.0
 
 ## API
 
 ### Scan barcode
 
-    cloudSky.zBar.scan(params, onSuccess, onFailure)
+    apogeek.zBar.scan(params, onSuccess, onFailure)
 
 Arguments:
 
@@ -55,5 +51,7 @@ This plugin is released under the Apache 2.0 license, but the ZBar library on wh
 
 
 ## Thanks
+
+Thank you TJ Woon for sharing the original code.
 
 Thank you to @PaoloMessina and @nickgerman for code contributions.
